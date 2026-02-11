@@ -1,538 +1,181 @@
 <!doctype html>
 <html lang="it">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ciaobabi 💖</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ciaobabi 💖</title>
 
-  <!-- Font carino -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Pacifico&display=swap" rel="stylesheet">
 
-  <style>
-    :root{
-      --bg1:#fff0f6;
-      --bg2:#f3f6ff;
-      --card:#ffffffcc;
-      --ink:#2b2b2b;
-      --pink:#ff5fa2;
-      --pink2:#ff8cc4;
-      --lav:#b7b4ff;
-      --shadow: 0 18px 50px rgba(0,0,0,.12);
-      --radius: 28px;
-    }
+<style>
+body{
+margin:0;
+font-family:"Baloo 2", sans-serif;
+background:linear-gradient(180deg,#fff,#ffe7f2);
+overflow:hidden;
+}
 
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{
-      margin:0;
-      color:var(--ink);
-      font-family:"Baloo 2", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background:
-        radial-gradient(1100px 700px at 20% 20%, var(--bg1), transparent 60%),
-        radial-gradient(900px 600px at 80% 30%, var(--bg2), transparent 60%),
-        linear-gradient(180deg, #fff, #ffe7f2);
-      overflow:hidden;
-    }
+.wrap{
+height:100vh;
+display:grid;
+place-items:center;
+}
 
-    /* cuoricini in background */
-    .hearts{
-      position:fixed; inset:0;
-      pointer-events:none;
-      opacity:.55;
-      filter: blur(.1px);
-    }
-    .heart{
-      position:absolute;
-      font-size: clamp(14px, 2vw, 22px);
-      animation: floatUp linear infinite;
-      transform: translateY(110vh);
-      user-select:none;
-    }
-    @keyframes floatUp{
-      from{ transform: translateY(110vh) rotate(0deg); opacity:0; }
-      10%{ opacity:1; }
-      to{ transform: translateY(-20vh) rotate(18deg); opacity:0; }
-    }
+.card{
+width:90%;
+max-width:600px;
+background:white;
+border-radius:25px;
+padding:25px;
+text-align:center;
+position:relative;
+}
 
-    .wrap{
-      height:100%;
-      display:grid;
-      place-items:center;
-      padding: 22px;
-    }
+.logo{
+font-family:"Pacifico";
+font-size:30px;
+color:#ff5fa2;
+}
 
-    .card{
-      width:min(720px, 92vw);
-      background:var(--card);
-      backdrop-filter: blur(10px);
-      border: 2px solid #ffffffaa;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: clamp(18px, 3.6vw, 34px);
-      position:relative;
-      overflow:hidden;
-    }
+button{
+padding:14px 20px;
+border-radius:999px;
+border:none;
+font-size:18px;
+cursor:pointer;
+margin:10px;
+transition:0.1s;
+}
 
-    /* decorazioni chibi-style */
-    .card::before, .card::after{
-      content:"";
-      position:absolute;
-      width:220px; height:220px;
-      border-radius: 60px;
-      background: radial-gradient(circle at 30% 30%, #fff, transparent 55%),
-                  radial-gradient(circle at 70% 70%, #ffd6ea, transparent 55%),
-                  linear-gradient(135deg, #ffe3f2, #e9e6ff);
-      opacity:.55;
-      filter: blur(0px);
-      transform: rotate(18deg);
-    }
-    .card::before{ top:-110px; left:-80px; }
-    .card::after{ bottom:-120px; right:-90px; transform: rotate(-12deg); }
+#yesBtn{
+background:#ff5fa2;
+color:white;
+}
 
-    .brand{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom: 12px;
-      position:relative;
-      z-index:1;
-    }
-    .brand .logo{
-      font-family:"Pacifico", cursive;
-      font-size: clamp(22px, 4.2vw, 34px);
-      color: var(--pink);
-      text-shadow: 0 8px 18px rgba(255,95,162,.25);
-    }
-    .pill{
-      font-size: 14px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, #ffffff, #fff0f7);
-      border: 1px solid #ffd2e6;
-      box-shadow: 0 10px 25px rgba(255,95,162,.12);
-      white-space:nowrap;
-    }
+#noBtn{
+background:#eee;
+position:relative;
+}
 
-    h1{
-      margin: 8px 0 10px;
-      font-size: clamp(26px, 5.2vw, 44px);
-      line-height:1.05;
-      position:relative;
-      z-index:1;
-    }
-    .sub{
-      margin: 0 0 18px;
-      font-size: clamp(14px, 2.2vw, 18px);
-      opacity:.85;
-      position:relative;
-      z-index:1;
-    }
+.result{
+display:none;
+margin-top:20px;
+}
 
-    .stage{
-      position:relative;
-      z-index:1;
-      padding-top: 10px;
-    }
+.result img{
+width:100%;
+border-radius:20px;
+}
 
-    .btnRow{
-      display:flex;
-      gap:14px;
-      align-items:center;
-      justify-content:center;
-      flex-wrap:wrap;
-      margin-top: 14px;
-      position:relative;
-      min-height: 84px;
-    }
+.modalBackdrop{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.4);
+display:none;
+align-items:center;
+justify-content:center;
+}
 
-    button{
-      border:0;
-      cursor:pointer;
-      font-family: inherit;
-      font-weight: 700;
-      font-size: 18px;
-      padding: 14px 22px;
-      border-radius: 999px;
-      transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
-      user-select:none;
-      touch-action: manipulation;
-    }
-    button:active{ transform: translateY(1px) scale(.99); }
-
-    #yesBtn{
-      background: linear-gradient(135deg, var(--pink), var(--pink2));
-      color:white;
-      box-shadow: 0 16px 35px rgba(255,95,162,.35);
-    }
-    #yesBtn:hover{ filter: brightness(1.03); transform: translateY(-1px) scale(1.02); }
-
-    #noBtn{
-      background: linear-gradient(135deg, #ffffff, #f7f7ff);
-      color:#5b5b5b;
-      border: 2px solid #ffd2e6;
-      box-shadow: 0 14px 28px rgba(0,0,0,.08);
-      position:relative;
-    }
-    #noBtn:hover{ transform: translateY(-1px); }
-
-    .hint{
-      margin-top: 14px;
-      text-align:center;
-      font-size: 13px;
-      opacity:.7;
-    }
-
-    /* POPUP (modal) */
-    .modalBackdrop{
-      position:fixed; inset:0;
-      background: rgba(20, 10, 25, .35);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding: 18px;
-      z-index: 50;
-    }
-    .modal{
-      width:min(420px, 92vw);
-      background: white;
-      border-radius: 22px;
-      box-shadow: 0 28px 80px rgba(0,0,0,.25);
-      border: 2px solid #ffe0ef;
-      position:relative;
-      overflow:hidden;
-    }
-    .modalHeader{
-      padding: 16px 16px 10px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      background: linear-gradient(135deg, #fff0f7, #f0f3ff);
-    }
-    .modalTitle{
-      font-weight:800;
-      font-size: 18px;
-    }
-    .closeX{
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
-      border: 0;
-      background: #ffffff;
-      box-shadow: 0 10px 25px rgba(0,0,0,.12);
-      cursor:pointer;
-      font-weight:900;
-      font-size: 18px;
-      line-height: 38px;
-    }
-    .modalBody{
-      padding: 18px 16px 18px;
-      text-align:center;
-      font-size: 16px;
-    }
-    .modalBody .emoji{
-      font-size: 34px;
-      display:block;
-      margin-bottom: 6px;
-    }
-
-    /* SEZIONE "BRAVO" */
-    .result{
-      display:none;
-      margin-top: 18px;
-      padding: 16px;
-      border-radius: 22px;
-      border: 2px dashed #ffb9d7;
-      background: linear-gradient(135deg, #fff, #fff5fb);
-    }
-    .resultTop{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-bottom: 10px;
-    }
-    .resultTop .title{
-      font-weight: 800;
-      color: var(--pink);
-      font-size: 18px;
-    }
-    .upload{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      flex-wrap:wrap;
-    }
-    input[type="file"]{
-      max-width: 260px;
-      font-family: inherit;
-    }
-
-    .photoFrame{
-      position:relative;
-      border-radius: 22px;
-      overflow:hidden;
-      border: 3px solid #ffd2e6;
-      box-shadow: 0 18px 45px rgba(255,95,162,.18);
-      background: #fff;
-    }
-    .photoFrame img{
-      display:block;
-      width:100%;
-      height:auto;
-    }
-    .bravo{
-      position:absolute;
-      inset:auto 12px 12px 12px;
-      padding: 10px 14px;
-      border-radius: 18px;
-      color:white;
-      font-weight: 900;
-      letter-spacing: .5px;
-      text-align:center;
-      background: linear-gradient(135deg, var(--pink), var(--lav));
-      box-shadow: 0 16px 35px rgba(0,0,0,.18);
-      text-transform: uppercase;
-    }
-
-    /* piccolo “chibi sticker” */
-    .sticker{
-      position:absolute;
-      top: 10px; right: 10px;
-      background: #ffffffcc;
-      border: 2px solid #ffe0ef;
-      border-radius: 18px;
-      padding: 8px 10px;
-      font-size: 14px;
-      box-shadow: 0 12px 25px rgba(0,0,0,.10);
-    }
-
-    /* mobile-friendly */
-    @media (max-width: 430px){
-      button{ width: 100%; max-width: 320px; }
-      .btnRow{ min-height: 140px; }
-    }
-  </style>
+.modal{
+background:white;
+padding:20px;
+border-radius:20px;
+text-align:center;
+}
+</style>
 </head>
 
 <body>
-  <!-- cuoricini -->
-  <div class="hearts" id="hearts"></div>
 
-  <div class="wrap">
-    <div class="card" id="card">
-      <div class="brand">
-        <div class="logo">ciaobabi</div>
-        <div class="pill">💌 San Valentino</div>
-      </div>
+<div class="wrap">
+<div class="card" id="card">
 
-      <h1>Vuoi essere il mio Valentino? 💖</h1>
-      <p class="sub">Prometto coccole, dolcetti e un livello di carineria… <b>chibi</b>. 🥺✨</p>
+<div class="logo">ciaobabi</div>
 
-      <div class="stage">
-        <div class="btnRow" id="btnRow">
-          <button id="yesBtn" type="button">SÌ 💘</button>
-          <button id="noBtn" type="button">NO 🙈</button>
-        </div>
+<h1>Vuoi essere il mio Valentino? 💖</h1>
 
-        <div class="result" id="result">
-          <div class="resultTop">
-            <div class="title">Yay! Sapevo che avresti detto sì 🥰</div>
+<button id="yesBtn">SÌ 💘</button>
+<button id="noBtn">NO 🙈</button>
 
-            <!-- Puoi eliminare l’upload se vuoi fissare una foto direttamente -->
-            <div class="upload">
-              <label for="imgInput"><b>Metti la tua foto:</b></label>
-              <input id="imgInput" type="file" accept="image/*" />
-            </div>
-          </div>
+<div class="result" id="result">
+<h2>BRAVO 💖</h2>
+<img src="https://cataas.com/cat">
+</div>
 
-          <div class="photoFrame">
-            <div class="sticker">🧸 chibi vibes</div>
-            <img id="resultImg"
-              alt="Foto BRAVO"
-              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='800'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%23fff0f7'/%3E%3Cstop offset='1' stop-color='%23f0f3ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23g)'/%3E%3Ctext x='50%25' y='48%25' text-anchor='middle' font-size='46' font-family='Arial' fill='%23ff5fa2'%3ECarica una foto qui%3C/text%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' font-size='26' font-family='Arial' fill='%23555555'%3E(o sostituisci il src nel codice)%3C/text%3E%3C/svg%3E" />
-            <div class="bravo">BRAVO 💖</div>
-          </div>
+</div>
+</div>
 
-          <div class="hint">Se vuoi, puoi cambiare testo, colori, cuori, tutto quanto nel codice ✨</div>
-        </div>
+<div class="modalBackdrop" id="modalBackdrop">
+<div class="modal">
+<h2>Vuoi schiaffoni?</h2>
+<button id="closeX">✕</button>
+</div>
+</div>
 
-        <div class="hint">P.S. Se provi a dire di no… potrei diventare un pochino birichina 😇</div>
-      </div>
-    </div>
-  </div>
+<script>
+const yesBtn=document.getElementById("yesBtn");
+const noBtn=document.getElementById("noBtn");
+const modal=document.getElementById("modalBackdrop");
+const closeX=document.getElementById("closeX");
+const result=document.getElementById("result");
+const card=document.getElementById("card");
 
-  <!-- MODAL -->
-  <div class="modalBackdrop" id="modalBackdrop" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <div class="modalHeader">
-        <div class="modalTitle" id="modalTitle">Messaggio importante</div>
-        <button class="closeX" id="closeX" type="button" aria-label="Chiudi">✕</button>
-      </div>
-      <div class="modalBody">
-        <span class="emoji">😤💢</span>
-        <div><b>Vuoi schiaffoni?</b></div>
-        <div style="opacity:.75; margin-top:6px;">(puoi solo premere la X 😌)</div>
-      </div>
-    </div>
-  </div>
+let evasive=false;
 
-  <script>
-    // ====== Hearts background ======
-    const hearts = document.getElementById("hearts");
-    const heartChars = ["💗","💖","💘","💕","💞","💓","✨","🌸","🫶"];
-    const HEART_COUNT = 22;
+// CLICK NO
+noBtn.onclick=()=>{
+if(evasive) return;
+modal.style.display="flex";
+}
 
-    function rand(min, max){ return Math.random() * (max - min) + min; }
+// CHIUSURA POPUP
+closeX.onclick=()=>{
+modal.style.display="none";
+evasive=true;
+}
 
-    for(let i=0;i<HEART_COUNT;i++){
-      const s = document.createElement("div");
-      s.className = "heart";
-      s.textContent = heartChars[Math.floor(Math.random()*heartChars.length)];
-      s.style.left = rand(0, 100) + "vw";
-      s.style.animationDuration = rand(6, 14) + "s";
-      s.style.animationDelay = rand(0, 8) + "s";
-      s.style.opacity = rand(.25, .75);
-      s.style.filter = `blur(${rand(0, .7)}px)`;
-      hearts.appendChild(s);
-    }
+// CLICK SI
+yesBtn.onclick=()=>{
+result.style.display="block";
+}
 
-    // ====== Core logic ======
-    const yesBtn = document.getElementById("yesBtn");
-    const noBtn  = document.getElementById("noBtn");
-    const modalBackdrop = document.getElementById("modalBackdrop");
-    const closeX = document.getElementById("closeX");
-    const result = document.getElementById("result");
-    const btnRow = document.getElementById("btnRow");
-    const imgInput = document.getElementById("imgInput");
-    const resultImg = document.getElementById("resultImg");
+// FUNZIONE SCAPPARE DAL MOUSE
+document.addEventListener("mousemove",(e)=>{
 
-    let noIsEvasive = false;   // diventa vero dopo aver chiuso il popup
-    let noWasClicked = false;  // per ricordare che il popup è stato visto
+if(!evasive) return;
 
-    function openModal(){
-      modalBackdrop.style.display = "flex";
-      modalBackdrop.setAttribute("aria-hidden", "false");
-      // focus sulla X per accessibilità
-      closeX.focus();
-    }
+const rect=noBtn.getBoundingClientRect();
+const mouseX=e.clientX;
+const mouseY=e.clientY;
 
-    function closeModal(){
-      modalBackdrop.style.display = "none";
-      modalBackdrop.setAttribute("aria-hidden", "true");
-      // attiva modalità "NO che scappa"
-      noIsEvasive = true;
-    }
+const distance=Math.hypot(
+(mouseX-(rect.left+rect.width/2)),
+(mouseY-(rect.top+rect.height/2))
+);
 
-    // clic NO => popup (solo X per uscire)
-    noBtn.addEventListener("click", (e) => {
-      if(noIsEvasive){
-        // Se per caso lo cliccano (quasi impossibile), lo facciamo scappare comunque
-        moveNoButton();
-        return;
-      }
-      noWasClicked = true;
-      openModal();
-    });
+// Se il mouse si avvicina
+if(distance<120){
 
-    closeX.addEventListener("click", closeModal);
+const moveX=(Math.random()*80)-40;
+const moveY=(Math.random()*80)-40;
 
-    // impedisce chiusura cliccando fuori: SOLO X
-    modalBackdrop.addEventListener("click", (e) => {
-      // niente: non chiudere se cliccano sul backdrop
-      // (ma se cliccano dentro modal, ovviamente ok)
-      if(e.target === modalBackdrop){
-        // mini "shake" visivo, facoltativo
-        const modal = modalBackdrop.querySelector(".modal");
-        modal.animate(
-          [{transform:"translateX(0)"},{transform:"translateX(-8px)"},{transform:"translateX(8px)"},{transform:"translateX(0)"}],
-          {duration: 260, easing:"ease-out"}
-        );
-      }
-    });
+noBtn.style.position="absolute";
 
-    // SÌ => mostra foto + BRAVO
-    yesBtn.addEventListener("click", () => {
-      result.style.display = "block";
-      // scroll morbido dentro card (se serve)
-      result.scrollIntoView({behavior:"smooth", block:"nearest"});
-      // disabilita i bottoni per “finale felice” (opzionale)
-      yesBtn.disabled = true;
-      yesBtn.style.filter = "grayscale(0)";
-      yesBtn.textContent = "SÌ 💘 (scelta perfetta)";
+const cardRect=card.getBoundingClientRect();
 
-      // il NO lo rendiamo ancora più inutile 😄
-      noIsEvasive = true;
-    });
+let newLeft=noBtn.offsetLeft+moveX;
+let newTop=noBtn.offsetTop+moveY;
 
-    // Caricamento immagine (così puoi usare la foto che mi mandi)
-    imgInput.addEventListener("change", () => {
-      const file = imgInput.files?.[0];
-      if(!file) return;
-      const url = URL.createObjectURL(file);
-      resultImg.src = url;
-    });
+// Limiti per restare dentro la card
+newLeft=Math.max(0,Math.min(cardRect.width-120,newLeft));
+newTop=Math.max(100,Math.min(cardRect.height-60,newTop));
 
-    // ====== NO button evasive behavior ======
-    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+noBtn.style.left=newLeft+"px";
+noBtn.style.top=newTop+"px";
 
-    function moveNoButton(){
-      // calcola un nuovo punto casuale DENTRO la card
-      const card = document.getElementById("card");
-      const cardRect = card.getBoundingClientRect();
-      const btnRect = noBtn.getBoundingClientRect();
+}
+});
+</script>
 
-      const padding = 18;
-      const maxX = cardRect.width - btnRect.width - padding;
-      const maxY = cardRect.height - btnRect.height - padding;
-
-      // posizione random ma non troppo ai bordi
-      const x = clamp(rand(padding, maxX), padding, maxX);
-      const y = clamp(rand(padding + 90, maxY), padding + 90, maxY);
-
-      // posizione assoluta relativa alla card
-      // (mettiamo noBtn in absolute solo quando serve)
-      noBtn.style.position = "absolute";
-      noBtn.style.left = x + "px";
-      noBtn.style.top  = y + "px";
-      noBtn.style.transition = "left .12s ease, top .12s ease";
-      noBtn.style.zIndex = 5;
-    }
-
-    function activateEvasiveIfNeeded(){
-      if(!noIsEvasive) return;
-      moveNoButton();
-    }
-
-    // quando provi ad avvicinarti col mouse -> scappa
-    noBtn.addEventListener("mouseenter", () => {
-      if(noIsEvasive) moveNoButton();
-    });
-    noBtn.addEventListener("mousemove", () => {
-      if(noIsEvasive) moveNoButton();
-    });
-
-    // su mobile: quando tocchi vicino / inizi a toccare il NO -> scappa
-    noBtn.addEventListener("touchstart", (e) => {
-      if(noIsEvasive){
-        e.preventDefault();
-        moveNoButton();
-      }
-    }, {passive:false});
-
-    // dopo chiusura popup: alla prima “intenzione” di andare verso NO, scappa subito
-    // (es. muovendo il mouse nell’area bottoni)
-    btnRow.addEventListener("mousemove", () => {
-      if(noIsEvasive) {
-        // se il NO è ancora in posizione "normale", lo spostiamo una volta
-        if(noBtn.style.position !== "absolute") activateEvasiveIfNeeded();
-      }
-    });
-
-  </script>
 </body>
 </html>
