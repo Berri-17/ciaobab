@@ -1,490 +1,219 @@
 <!doctype html>
 <html lang="it">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ciaobabi 💖</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ciaobabi 💖</title>
 
-  <!-- Font carino -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Pacifico&display=swap" rel="stylesheet">
 
-  <style>
-    :root{
-      --bg1:#fff0f6;
-      --bg2:#f3f6ff;
-      --card:#ffffffcc;
-      --ink:#2b2b2b;
-      --pink:#ff5fa2;
-      --pink2:#ff8cc4;
-      --lav:#b7b4ff;
-      --shadow: 0 18px 50px rgba(0,0,0,.12);
-      --radius: 28px;
-    }
+<style>
 
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{
-      margin:0;
-      color:var(--ink);
-      font-family:"Baloo 2", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background:
-        radial-gradient(1100px 700px at 20% 20%, var(--bg1), transparent 60%),
-        radial-gradient(900px 600px at 80% 30%, var(--bg2), transparent 60%),
-        linear-gradient(180deg, #fff, #ffe7f2);
-      overflow:hidden;
-    }
+:root{
+  --pink:#ff5fa2;
+  --lav:#b7b4ff;
+}
 
-    /* cuoricini in background */
-    .hearts{
-      position:fixed; inset:0;
-      pointer-events:none;
-      opacity:.55;
-      filter: blur(.1px);
-    }
-    .heart{
-      position:absolute;
-      font-size: clamp(14px, 2vw, 22px);
-      animation: floatUp linear infinite;
-      transform: translateY(110vh);
-      user-select:none;
-    }
-    @keyframes floatUp{
-      from{ transform: translateY(110vh) rotate(0deg); opacity:0; }
-      10%{ opacity:1; }
-      to{ transform: translateY(-20vh) rotate(18deg); opacity:0; }
-    }
+body{
+margin:0;
+font-family:"Baloo 2", sans-serif;
+background:linear-gradient(180deg,#fff,#ffe7f2);
+overflow:hidden;
+}
 
-    .wrap{
-      height:100%;
-      display:grid;
-      place-items:center;
-      padding: 22px;
-    }
+.wrap{
+height:100vh;
+display:grid;
+place-items:center;
+}
 
-    .card{
-      width:min(720px, 92vw);
-      background:var(--card);
-      backdrop-filter: blur(10px);
-      border: 2px solid #ffffffaa;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: clamp(18px, 3.6vw, 34px);
-      position:relative;
-      overflow:hidden;
-    }
+.card{
+width:90%;
+max-width:650px;
+background:white;
+border-radius:25px;
+padding:25px;
+text-align:center;
+position:relative;
+}
 
-    /* decorazioni chibi-style */
-    .card::before, .card::after{
-      content:"";
-      position:absolute;
-      width:220px; height:220px;
-      border-radius: 60px;
-      background: radial-gradient(circle at 30% 30%, #fff, transparent 55%),
-                  radial-gradient(circle at 70% 70%, #ffd6ea, transparent 55%),
-                  linear-gradient(135deg, #ffe3f2, #e9e6ff);
-      opacity:.55;
-      transform: rotate(18deg);
-    }
-    .card::before{ top:-110px; left:-80px; }
-    .card::after{ bottom:-120px; right:-90px; transform: rotate(-12deg); }
+.logo{
+font-family:"Pacifico";
+font-size:30px;
+color:var(--pink);
+}
 
-    .brand{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom: 12px;
-      position:relative;
-      z-index:1;
-    }
-    .brand .logo{
-      font-family:"Pacifico", cursive;
-      font-size: clamp(22px, 4.2vw, 34px);
-      color: var(--pink);
-      text-shadow: 0 8px 18px rgba(255,95,162,.25);
-    }
-    .pill{
-      font-size: 14px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, #ffffff, #fff0f7);
-      border: 1px solid #ffd2e6;
-      box-shadow: 0 10px 25px rgba(255,95,162,.12);
-      white-space:nowrap;
-    }
+button{
+padding:14px 20px;
+border-radius:999px;
+border:none;
+font-size:18px;
+cursor:pointer;
+margin:10px;
+}
 
-    h1{
-      margin: 8px 0 14px;
-      font-size: clamp(26px, 5.2vw, 44px);
-      line-height:1.05;
-      position:relative;
-      z-index:1;
-      text-align:center;
-    }
+#yesBtn{
+background:var(--pink);
+color:white;
+}
 
-    .stage{
-      position:relative;
-      z-index:1;
-      padding-top: 10px;
-    }
+#noBtn{
+background:#eee;
+position:relative;
+}
 
-    .btnRow{
-      display:flex;
-      gap:14px;
-      align-items:center;
-      justify-content:center;
-      flex-wrap:wrap;
-      margin-top: 14px;
-      position:relative;
-      min-height: 84px;
-    }
+/* RISULTATO */
 
-    button{
-      border:0;
-      cursor:pointer;
-      font-family: inherit;
-      font-weight: 700;
-      font-size: 18px;
-      padding: 14px 22px;
-      border-radius: 999px;
-      transition: transform .08s ease, box-shadow .12s ease, filter .12s ease;
-      user-select:none;
-      touch-action: manipulation;
-    }
-    button:active{ transform: translateY(1px) scale(.99); }
+.result{
+display:none;
+margin-top:20px;
+}
 
-    #yesBtn{
-      background: linear-gradient(135deg, var(--pink), var(--pink2));
-      color:white;
-      box-shadow: 0 16px 35px rgba(255,95,162,.35);
-    }
-    #yesBtn:hover{ filter: brightness(1.03); transform: translateY(-1px) scale(1.02); }
+.photoFrame{
+position:relative;
+border-radius:22px;
+overflow:hidden;
+border:3px solid #ffd2e6;
+background:#fff;
+max-height:70vh;
+}
 
-    #noBtn{
-      background: linear-gradient(135deg, #ffffff, #f7f7ff);
-      color:#5b5b5b;
-      border: 2px solid #ffd2e6;
-      box-shadow: 0 14px 28px rgba(0,0,0,.08);
-      position:relative; /* diventa absolute solo quando scappa */
-    }
+.photoFrame img{
+width:100%;
+height:70vh;
+object-fit:contain;
+}
 
-    /* POPUP (modal) */
-    .modalBackdrop{
-      position:fixed; inset:0;
-      background: rgba(20, 10, 25, .35);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding: 18px;
-      z-index: 50;
-    }
-    .modal{
-      width:min(420px, 92vw);
-      background: white;
-      border-radius: 22px;
-      box-shadow: 0 28px 80px rgba(0,0,0,.25);
-      border: 2px solid #ffe0ef;
-      overflow:hidden;
-    }
-    .modalHeader{
-      padding: 16px 16px 10px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      background: linear-gradient(135deg, #fff0f7, #f0f3ff);
-    }
-    .modalTitle{
-      font-weight:800;
-      font-size: 18px;
-    }
-    .closeX{
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
-      border: 0;
-      background: #ffffff;
-      box-shadow: 0 10px 25px rgba(0,0,0,.12);
-      cursor:pointer;
-      font-weight:900;
-      font-size: 18px;
-      line-height: 38px;
-    }
-    .modalBody{
-      padding: 18px 16px 18px;
-      text-align:center;
-      font-size: 16px;
-    }
-    .modalBody .emoji{
-      font-size: 34px;
-      display:block;
-      margin-bottom: 6px;
-    }
+/* SCRITTA SOTTO FOTO */
 
-    /* SEZIONE "BRAVO" */
-    .result{
-      display:none;
-      margin-top: 18px;
-      padding: 16px;
-      border-radius: 22px;
-      border: 2px dashed #ffb9d7;
-      background: linear-gradient(135deg, #fff, #fff5fb);
-    }
-    .resultTop{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-bottom: 10px;
-    }
-    .resultTop .title{
-      font-weight: 800;
-      color: var(--pink);
-      font-size: 18px;
-    }
+.bravoBelow{
+margin-top:15px;
+padding:12px 16px;
+border-radius:18px;
+color:white;
+font-weight:900;
+text-align:center;
+background:linear-gradient(135deg,var(--pink),var(--lav));
+}
 
-    .photoFrame{
-      position:relative;
-      border-radius: 22px;
-      overflow:hidden;
-      border: 3px solid #ffd2e6;
-      box-shadow: 0 18px 45px rgba(255,95,162,.18);
-      background: #fff;
-    }
-    .photoFrame{
-    max-height: 70vh;      /* non diventa enorme */
-    }
+/* POPUP */
 
-    .photoFrame img{
-    display:block;
-    width:100%;
-    height: 70vh;          /* stessa altezza del frame */
-    object-fit: contain;   /* mostra tutta l’immagine */
-    background: #fff;      /* sfondo pulito ai lati */
-    }
-    
-    .bravo{
-      position:absolute;
-      inset:auto 12px 12px 12px;
-      padding: 10px 14px;
-      border-radius: 18px;
-      color:white;
-      font-weight: 900;
-      letter-spacing: .5px;
-      text-align:center;
-      background: linear-gradient(135deg, var(--pink), var(--lav));
-      box-shadow: 0 16px 35px rgba(0,0,0,.18);
-      text-transform: uppercase;
-    }
-    .sticker{
-      position:absolute;
-      top: 10px; right: 10px;
-      background: #ffffffcc;
-      border: 2px solid #ffe0ef;
-      border-radius: 18px;
-      padding: 8px 10px;
-      font-size: 14px;
-      box-shadow: 0 12px 25px rgba(0,0,0,.10);
-    }
+.modalBackdrop{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.4);
+display:none;
+align-items:center;
+justify-content:center;
+}
 
-    @media (max-width: 430px){
-      button{ width: 100%; max-width: 320px; }
-      .btnRow{ min-height: 140px; }
-    }
-  </style>
+.modal{
+background:white;
+padding:20px;
+border-radius:20px;
+text-align:center;
+}
+
+</style>
 </head>
 
 <body>
-  <!-- cuoricini -->
-  <div class="hearts" id="hearts"></div>
 
-  <div class="wrap">
-    <div class="card" id="card">
-      <div class="brand">
-        <div class="logo">ciaobabi</div>
-        <div class="pill">💌 San Valentino</div>
-      </div>
+<div class="wrap">
+<div class="card" id="card">
 
-      <h1>Vuoi essere il mio Valentino? 💖</h1>
+<div class="logo">ciaobabi</div>
 
-      <div class="stage">
-        <div class="btnRow" id="btnRow">
-          <button id="yesBtn" type="button">SÌ 💘</button>
-          <button id="noBtn" type="button">NO 🙈</button>
-        </div>
+<h1>Vuoi essere il mio Valentino? 💖</h1>
 
-        <div class="result" id="result">
-          <div class="resultTop">
-            <div class="title">Yay! Sapevo che avresti detto sì 🥰</div>
-          </div>
+<div id="btnRow">
+<button id="yesBtn">SÌ 💘</button>
+<button id="noBtn">NO 🙈</button>
+</div>
 
-          <div class="photoFrame">
-            <div class="sticker">🧸 chibi vibes</div>
+<div class="result" id="result">
 
-            <!-- IMMAGINE DI PROVA (gatto casuale). Quando mi dai la tua, sostituisci questo src -->
-            <img id="resultImg" alt="Foto BRAVO" src="casina.jpg" />
+<div class="photoFrame">
+<img src="casina.jpg">
+</div>
 
-            <div class="bravo">BRAVO 💖</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="bravoBelow">SAGGIA SCELTA 💖</div>
 
-  <!-- MODAL -->
-  <div class="modalBackdrop" id="modalBackdrop" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <div class="modalHeader">
-        <div class="modalTitle" id="modalTitle">Messaggio importante</div>
-        <button class="closeX" id="closeX" type="button" aria-label="Chiudi">✕</button>
-      </div>
-      <div class="modalBody">
-        <span class="emoji">😤💢</span>
-        <div><b>Vuoi schiaffoni?</b></div>
-      </div>
-    </div>
-  </div>
+</div>
 
-  <script>
-    // ====== Hearts background ======
-    const hearts = document.getElementById("hearts");
-    const heartChars = ["💗","💖","💘","💕","💞","💓","✨","🌸","🫶"];
-    const HEART_COUNT = 22;
+</div>
+</div>
 
-    function rand(min, max){ return Math.random() * (max - min) + min; }
+<div class="modalBackdrop" id="modalBackdrop">
+<div class="modal">
+<h2>Vuoi schiaffoni?</h2>
+<button id="closeX">✕</button>
+</div>
+</div>
 
-    for(let i=0;i<HEART_COUNT;i++){
-      const s = document.createElement("div");
-      s.className = "heart";
-      s.textContent = heartChars[Math.floor(Math.random()*heartChars.length)];
-      s.style.left = rand(0, 100) + "vw";
-      s.style.animationDuration = rand(6, 14) + "s";
-      s.style.animationDelay = rand(0, 8) + "s";
-      s.style.opacity = rand(.25, .75);
-      s.style.filter = `blur(${rand(0, .7)}px)`;
-      hearts.appendChild(s);
-    }
+<script>
 
-    // ====== Core logic ======
-    const yesBtn = document.getElementById("yesBtn");
-    const noBtn  = document.getElementById("noBtn");
-    const modalBackdrop = document.getElementById("modalBackdrop");
-    const closeX = document.getElementById("closeX");
-    const result = document.getElementById("result");
-    const card = document.getElementById("card");
+const yesBtn=document.getElementById("yesBtn");
+const noBtn=document.getElementById("noBtn");
+const modal=document.getElementById("modalBackdrop");
+const closeX=document.getElementById("closeX");
+const result=document.getElementById("result");
+const card=document.getElementById("card");
+const btnRow=document.getElementById("btnRow");
 
-    let noIsEvasive = false; // diventa vero dopo aver chiuso il popup
+let evasive=false;
 
-    function openModal(){
-      modalBackdrop.style.display = "flex";
-      modalBackdrop.setAttribute("aria-hidden", "false");
-      closeX.focus();
-    }
+// CLICK NO
+noBtn.onclick=()=>{
+if(evasive) return;
+modal.style.display="flex";
+}
 
-    function closeModal(){
-      modalBackdrop.style.display = "none";
-      modalBackdrop.setAttribute("aria-hidden", "true");
-      noIsEvasive = true;
+// CHIUDI POPUP
+closeX.onclick=()=>{
+modal.style.display="none";
+evasive=true;
 
-      // IMPORTANT: una volta attivo, mettiamo NO in absolute ma nello stesso punto
-      // così può "scappare" di pochi pixel senza sparire/volare lontano.
-      const btnRect = noBtn.getBoundingClientRect();
-      const cardRect = card.getBoundingClientRect();
+// rende il bottone assoluto nello stesso punto
+const btnRect=noBtn.getBoundingClientRect();
+const cardRect=card.getBoundingClientRect();
 
-      const left = btnRect.left - cardRect.left;
-      const top  = btnRect.top  - cardRect.top;
+noBtn.style.position="absolute";
+noBtn.style.left=(btnRect.left-cardRect.left)+"px";
+noBtn.style.top=(btnRect.top-cardRect.top)+"px";
+}
 
-      noBtn.style.position = "absolute";
-      noBtn.style.left = left + "px";
-      noBtn.style.top  = top  + "px";
-    }
+// CLICK SI
+yesBtn.onclick=()=>{
+result.style.display="block";
+btnRow.style.display="none";
+}
 
-    // clic NO => popup (finché non è evasivo)
-    noBtn.addEventListener("click", () => {
-      if (noIsEvasive) return; // dopo popup non si deve più poter cliccare
-      openModal();
-    });
+// NO SCAPPA VICINO AL MOUSE
 
-    closeX.addEventListener("click", closeModal);
+document.addEventListener("mousemove",(e)=>{
 
-    // impedisce chiusura cliccando fuori: SOLO X
-    modalBackdrop.addEventListener("click", (e) => {
-      if(e.target === modalBackdrop){
-        const modal = modalBackdrop.querySelector(".modal");
-        modal.animate(
-          [{transform:"translateX(0)"},{transform:"translateX(-8px)"},{transform:"translateX(8px)"},{transform:"translateX(0)"}],
-          {duration: 260, easing:"ease-out"}
-        );
-      }
-    });
+if(!evasive) return;
 
-    // SÌ => mostra immagine + BRAVO
-    yesBtn.addEventListener("click", () => {
-      result.style.display = "block";
-      result.scrollIntoView({behavior:"smooth", block:"nearest"});
-      noIsEvasive = true; // anche qui ok che non si possa più cliccare NO
-    });
+const rect=noBtn.getBoundingClientRect();
 
-    // ====== NO button: scappa di pochi pixel "vicino" al mouse ======
-    // idea: quando il cursore entra in una zona vicina al bottone,
-    // lo spostiamo di pochi pixel nella direzione opposta.
-    const SAFE_RADIUS = 70;   // quanto vicino deve essere il mouse per farlo scappare
-    const STEP = 10;          // quanti pixel si sposta per volta (piccolo!)
-    const PADDING = 10;       // margine dentro la card
+const dx=(rect.left+rect.width/2)-e.clientX;
+const dy=(rect.top+rect.height/2)-e.clientY;
 
-    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+const dist=Math.hypot(dx,dy);
 
-    function nudgeAwayFromMouse(mouseX, mouseY){
-      const cardRect = card.getBoundingClientRect();
-      const btnRect = noBtn.getBoundingClientRect();
+if(dist<80){
 
-      const btnCenterX = btnRect.left + btnRect.width/2;
-      const btnCenterY = btnRect.top  + btnRect.height/2;
+const step=8;
 
-      const dx = btnCenterX - mouseX;
-      const dy = btnCenterY - mouseY;
+noBtn.style.left=(noBtn.offsetLeft+(dx/dist)*step)+"px";
+noBtn.style.top=(noBtn.offsetTop+(dy/dist)*step)+"px";
 
-      const dist = Math.hypot(dx, dy);
-      if (dist > SAFE_RADIUS) return;
+}
 
-      // direzione "via dal mouse"
-      const ux = dx / (dist || 1);
-      const uy = dy / (dist || 1);
+});
 
-      // pos attuale (relative alla card)
-      const currentLeft = parseFloat(noBtn.style.left || "0");
-      const currentTop  = parseFloat(noBtn.style.top  || "0");
+</script>
 
-      let newLeft = currentLeft + ux * STEP;
-      let newTop  = currentTop  + uy * STEP;
-
-      // limiti: resta dentro la card
-      const maxLeft = cardRect.width  - btnRect.width  - PADDING;
-      const maxTop  = cardRect.height - btnRect.height - PADDING;
-
-      newLeft = clamp(newLeft, PADDING, maxLeft);
-      newTop  = clamp(newTop,  80,      maxTop); // 80 per non finire sopra al titolo
-
-      noBtn.style.left = newLeft + "px";
-      noBtn.style.top  = newTop  + "px";
-    }
-
-    document.addEventListener("mousemove", (e) => {
-      if (!noIsEvasive) return;
-      nudgeAwayFromMouse(e.clientX, e.clientY);
-    });
-
-    // su mobile: se provi a toccarlo, scappa leggermente
-    noBtn.addEventListener("touchstart", (e) => {
-      if(!noIsEvasive) return;
-      e.preventDefault();
-
-      const touch = e.touches[0];
-      nudgeAwayFromMouse(touch.clientX, touch.clientY);
-    }, {passive:false});
-  </script>
 </body>
 </html>
