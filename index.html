@@ -666,13 +666,15 @@
       result.style.display = "none";
       btnRow.style.display = "flex";
       noIsEvasive = false;
-
+    
       noBtn.style.position = "relative";
       noBtn.style.left = "";
       noBtn.style.top = "";
-
-      // ✅ torna alla schermata iniziale “intera”
-      window.scrollTo({ top: 0, behavior: "smooth" });
+    
+      // ✅ torna su (così rivedi la schermata iniziale completa)
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
     }
 
     closeResult.addEventListener("click", goBackToStart);
