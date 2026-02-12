@@ -35,10 +35,10 @@
         radial-gradient(1100px 700px at 20% 20%, var(--bg1), transparent 60%),
         radial-gradient(900px 600px at 80% 30%, var(--bg2), transparent 60%),
         linear-gradient(180deg, #fff, #ffe7f2);
-      overflow:hidden;
+      overflow:auto; /* ✅ */
     }
 
-    /* cuoricini in background */
+    /* cuoricini */
     .hearts{
       position:fixed; inset:0;
       pointer-events:none;
@@ -61,7 +61,7 @@
     }
 
     .wrap{
-      height:100%;
+      min-height:100%;
       display:grid;
       place-items:center;
       padding: 22px;
@@ -81,7 +81,6 @@
       overflow:hidden;
     }
 
-    /* decorazioni chibi */
     .card::before, .card::after{
       content:"";
       position:absolute;
@@ -139,6 +138,7 @@
       padding-top: 10px;
     }
 
+    /* container bottoni: serve perché NO poi diventa absolute relativo a questo */
     .btnRow{
       display:flex;
       gap:14px;
@@ -147,7 +147,7 @@
       flex-wrap:wrap;
       margin-top: 14px;
       position:relative;
-      min-height: 84px;
+      min-height: 120px; /* un po' di spazio per farlo “scappare” dentro */
     }
 
     button{
@@ -169,7 +169,6 @@
       color:white;
       box-shadow: 0 16px 35px rgba(255,95,162,.35);
     }
-    #yesBtn:hover{ filter: brightness(1.03); transform: translateY(-1px) scale(1.02); }
 
     #noBtn{
       background: linear-gradient(135deg, #ffffff, #f7f7ff);
@@ -179,7 +178,7 @@
       position:relative;
     }
 
-    /* POPUP */
+    /* POPUP arrabbiato */
     .modalBackdrop{
       position:fixed; inset:0;
       background: rgba(20, 10, 25, .42);
@@ -256,6 +255,7 @@
       background: linear-gradient(135deg, #fff, #fff5fb);
       animation: popIn .18s ease-out;
       position:relative;
+      scroll-margin-top: 18px;
     }
     @keyframes popIn{
       from{ transform: translateY(6px); opacity: .0; }
@@ -279,7 +279,6 @@
       background: #fff;
     }
 
-    /* X piccola per tornare indietro */
     .closeResult{
       position:absolute;
       top: 12px;
@@ -297,7 +296,6 @@
       border: 2px solid #ffd2e6;
       box-shadow: 0 14px 28px rgba(0,0,0,.10);
     }
-    .closeResult:hover{ transform: translateY(-1px); }
 
     .choice{
       margin-top: 12px;
@@ -314,7 +312,7 @@
 
     @media (max-width: 430px){
       button{ width: 100%; max-width: 320px; }
-      .btnRow{ min-height: 140px; }
+      .btnRow{ min-height: 160px; }
       .photoFrame img{ height: 62vh; }
     }
   </style>
@@ -339,14 +337,13 @@
         </div>
 
         <div class="result" id="result">
-          <!-- X per tornare indietro -->
           <button class="closeResult" id="closeResult" type="button" aria-label="Chiudi">✕</button>
 
           <div class="photoFrame">
             <img id="resultImg" alt="Foto" src="casina.jpg" />
           </div>
 
-          <div class="choice" id="choiceText">SAGGIA SCELTA 💖</div>
+          <div class="choice">SAGGIA SCELTA 💖</div>
         </div>
       </div>
     </div>
@@ -370,29 +367,23 @@
     // Cuoricini/stelline
     const hearts = document.getElementById("hearts");
     const heartChars = ["💗","💖","💘","💕","💞","💓","✨","🌸","🫶"];
-    const HEART_COUNT = 24;
-
-    function rand(min, max){ return Math.random() * (max - min) + min; }
-
-    for(let i=0;i<HEART_COUNT;i++){
+    for(let i=0;i<24;i++){
       const s = document.createElement("div");
       s.className = "heart";
       s.textContent = heartChars[Math.floor(Math.random()*heartChars.length)];
-      s.style.left = rand(0, 100) + "vw";
-      s.style.animationDuration = rand(7, 15) + "s";
-      s.style.animationDelay = rand(0, 9) + "s";
-      s.style.opacity = rand(.25, .75);
-      s.style.filter = `blur(${rand(0, .7)}px)`;
+      s.style.left = (Math.random()*100) + "vw";
+      s.style.animationDuration = (7 + Math.random()*8) + "s";
+      s.style.animationDelay = (Math.random()*9) + "s";
+      s.style.opacity = (0.25 + Math.random()*0.5);
+      s.style.filter = `blur(${Math.random()*0.7}px)`;
       hearts.appendChild(s);
     }
 
-    // Elementi
     const yesBtn = document.getElementById("yesBtn");
     const noBtn  = document.getElementById("noBtn");
     const btnRow = document.getElementById("btnRow");
     const result = document.getElementById("result");
     const closeResult = document.getElementById("closeResult");
-    const card = document.getElementById("card");
 
     const modalBackdrop = document.getElementById("modalBackdrop");
     const closeX = document.getElementById("closeX");
@@ -400,12 +391,7 @@
 
     let noIsEvasive = false;
 
-    function openModal(){
-      modalBackdrop.style.display = "flex";
-      modalBackdrop.setAttribute("aria-hidden", "false");
-      closeX.focus();
-
-      // shake più "rabbioso"
+    function shakeAngry(){
       modalBox.animate(
         [
           {transform:"translateX(0)"},
@@ -419,125 +405,85 @@
       );
     }
 
+    function openModal(){
+      modalBackdrop.style.display = "flex";
+      modalBackdrop.setAttribute("aria-hidden", "false");
+      closeX.focus();
+      shakeAngry();
+    }
+
     function closeModal(){
       modalBackdrop.style.display = "none";
       modalBackdrop.setAttribute("aria-hidden", "true");
-      activateNoEvasive();
+      noIsEvasive = true; // ✅ da qui in poi NO diventa imprendibile
     }
 
-    function activateNoEvasive(){
-      noIsEvasive = true;
-
-      // Metti NO in absolute nello stesso punto (così scappa di pochi pixel, non sparisce)
-      const btnRect = noBtn.getBoundingClientRect();
-      const cardRect = card.getBoundingClientRect();
-      noBtn.style.position = "absolute";
-      noBtn.style.left = (btnRect.left - cardRect.left) + "px";
-      noBtn.style.top  = (btnRect.top  - cardRect.top)  + "px";
-    }
-
-    function resetNoNormal(){
-      noIsEvasive = false;
-      noBtn.style.position = "relative";
-      noBtn.style.left = "";
-      noBtn.style.top = "";
-    }
-
-    // NO: prima popup, poi non cliccabile
-    noBtn.addEventListener("click", () => {
-      if (noIsEvasive) return;
-      openModal();
-    });
-
-    closeX.addEventListener("click", closeModal);
-
-    // Non chiudere cliccando fuori
-    modalBackdrop.addEventListener("click", (e) => {
-      if(e.target === modalBackdrop){
-        // shake ancora più forte se cliccano fuori
-        modalBox.animate(
-          [
-            {transform:"translateX(0)"},
-            {transform:"translateX(-12px)"},
-            {transform:"translateX(12px)"},
-            {transform:"translateX(-10px)"},
-            {transform:"translateX(10px)"},
-            {transform:"translateX(0)"}
-          ],
-          {duration: 300, easing:"ease-out"}
-        );
+    // NO: prima popup, poi “teletrasporto”
+    noBtn.addEventListener("click", (e) => {
+      if(!noIsEvasive){
+        openModal();
+        return;
       }
+      // dopo popup: non deve essere cliccabile -> scappa spostandosi
+      e.preventDefault();
+      moveNoRandom();
     });
 
-    // SÌ: mostra risultato, nasconde bottoni
-    yesBtn.addEventListener("click", () => {
-      btnRow.style.display = "none";
-      result.style.display = "block";
-      result.scrollIntoView({behavior:"smooth", block:"nearest"});
-
-      // se vuoi che NO diventi subito “scattante” anche dopo sì:
-      // activateNoEvasive();
-    });
-
-    // X nel risultato: torna indietro (ripristina anche NO normale)
-    closeResult.addEventListener("click", () => {
-      result.style.display = "none";
-      btnRow.style.display = "flex";
-      resetNoNormal(); // ✅ così non “sparisce” e torna normale
-    });
-
-    // NO che scappa “vicino al mouse” (pochi pixel, effetto non mi prendi)
-    const SAFE_RADIUS = 75;
-    const STEP = 10;     // piccoli scatti
-    const PADDING = 10;
-
-    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
-
-    function nudgeAway(mouseX, mouseY){
-      const cardRect = card.getBoundingClientRect();
-      const btnRect = noBtn.getBoundingClientRect();
-
-      const cx = btnRect.left + btnRect.width/2;
-      const cy = btnRect.top  + btnRect.height/2;
-
-      const dx = cx - mouseX;
-      const dy = cy - mouseY;
-
-      const dist = Math.hypot(dx, dy);
-      if (dist > SAFE_RADIUS) return;
-
-      // direzione via dal mouse
-      const ux = dx / (dist || 1);
-      const uy = dy / (dist || 1);
-
-      const currentLeft = parseFloat(noBtn.style.left || "0");
-      const currentTop  = parseFloat(noBtn.style.top  || "0");
-
-      let newLeft = currentLeft + ux * STEP;
-      let newTop  = currentTop  + uy * STEP;
-
-      const maxLeft = cardRect.width  - btnRect.width  - PADDING;
-      const maxTop  = cardRect.height - btnRect.height - PADDING;
-
-      newLeft = clamp(newLeft, PADDING, maxLeft);
-      newTop  = clamp(newTop,  90,      maxTop);
-
-      noBtn.style.left = newLeft + "px";
-      noBtn.style.top  = newTop  + "px";
-    }
-
-    document.addEventListener("mousemove", (e) => {
-      if (!noIsEvasive) return;
-      if (noBtn.style.position !== "absolute") return;
-      nudgeAway(e.clientX, e.clientY);
-    });
-
+    // Anche su mobile: quando provano a toccare NO dopo popup, si sposta
     noBtn.addEventListener("touchstart", (e) => {
       if(!noIsEvasive) return;
       e.preventDefault();
-      const t = e.touches[0];
-      nudgeAway(t.clientX, t.clientY);
+      moveNoRandom();
     }, {passive:false});
+
+    closeX.addEventListener("click", closeModal);
+
+    modalBackdrop.addEventListener("click", (e) => {
+      if(e.target === modalBackdrop){
+        shakeAngry();
+      }
+    });
+
+    // SÌ: mostra risultato e nasconde bottoni
+    yesBtn.addEventListener("click", () => {
+      btnRow.style.display = "none";
+      result.style.display = "block";
+      requestAnimationFrame(() => {
+        result.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+
+    // X risultato: torna indietro e reset NO
+    closeResult.addEventListener("click", () => {
+      result.style.display = "none";
+      btnRow.style.display = "flex";
+      noIsEvasive = false;
+      // rimetti NO “normale”
+      noBtn.style.position = "relative";
+      noBtn.style.left = "";
+      noBtn.style.top = "";
+    });
+
+    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+    function moveNoRandom(){
+      // il bottone si muove DENTRO la btnRow (così non sparisce)
+      const rowRect = btnRow.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+
+      const padding = 8;
+      const maxX = rowRect.width - btnRect.width - padding;
+      const maxY = rowRect.height - btnRect.height - padding;
+
+      // random dentro l’area bottoni
+      const x = clamp(Math.random()*maxX, padding, maxX);
+      const y = clamp(Math.random()*maxY, padding, maxY);
+
+      // rendilo absolute RELATIVO alla btnRow
+      noBtn.style.position = "absolute";
+      noBtn.style.left = x + "px";
+      noBtn.style.top  = y + "px";
+    }
   </script>
 </body>
 </html>
