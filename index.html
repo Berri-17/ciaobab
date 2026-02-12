@@ -20,6 +20,9 @@
       --lav:#b7b4ff;
       --shadow: 0 18px 50px rgba(0,0,0,.12);
       --radius: 28px;
+
+      --angry1:#ff3b3b;
+      --angry2:#ff7a18;
     }
 
     *{ box-sizing:border-box; }
@@ -179,7 +182,7 @@
     /* POPUP */
     .modalBackdrop{
       position:fixed; inset:0;
-      background: rgba(20, 10, 25, .35);
+      background: rgba(20, 10, 25, .42);
       display:none;
       align-items:center;
       justify-content:center;
@@ -190,8 +193,8 @@
       width:min(420px, 92vw);
       background: white;
       border-radius: 22px;
-      box-shadow: 0 28px 80px rgba(0,0,0,.25);
-      border: 2px solid #ffe0ef;
+      box-shadow: 0 28px 80px rgba(0,0,0,.28);
+      border: 3px solid #ffd1d1;
       overflow:hidden;
     }
     .modalHeader{
@@ -200,23 +203,26 @@
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      background: linear-gradient(135deg, #fff0f7, #f0f3ff);
+      background: linear-gradient(135deg, #fff2f2, #fff7ea);
+      border-bottom: 2px solid #ffe1e1;
     }
     .modalTitle{
-      font-weight:800;
+      font-weight:900;
       font-size: 18px;
+      color:#b10000;
+      letter-spacing:.2px;
     }
     .closeX{
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
       border: 0;
-      background: #ffffff;
-      box-shadow: 0 10px 25px rgba(0,0,0,.12);
+      background: linear-gradient(135deg, #fff, #fff0f0);
+      box-shadow: 0 12px 28px rgba(0,0,0,.14);
       cursor:pointer;
       font-weight:900;
       font-size: 18px;
-      line-height: 38px;
+      line-height: 40px;
     }
     .modalBody{
       padding: 18px 16px 18px;
@@ -224,9 +230,20 @@
       font-size: 16px;
     }
     .modalBody .emoji{
-      font-size: 34px;
+      font-size: 38px;
       display:block;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
+      filter: drop-shadow(0 10px 18px rgba(255,60,60,.25));
+    }
+    .angryText{
+      display:inline-block;
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      color:#fff;
+      font-weight:900;
+      background: linear-gradient(135deg, var(--angry1), var(--angry2));
+      box-shadow: 0 16px 35px rgba(255,60,60,.25);
     }
 
     /* RISULTATO */
@@ -238,6 +255,7 @@
       border: 2px dashed #ffb9d7;
       background: linear-gradient(135deg, #fff, #fff5fb);
       animation: popIn .18s ease-out;
+      position:relative;
     }
     @keyframes popIn{
       from{ transform: translateY(6px); opacity: .0; }
@@ -257,21 +275,29 @@
       display:block;
       width:100%;
       height: 70vh;
-      object-fit: contain;   /* mostra tutta l'immagine */
+      object-fit: contain;
       background: #fff;
     }
 
-    .sticker{
+    /* X piccola per tornare indietro */
+    .closeResult{
       position:absolute;
-      top: 10px; right: 10px;
-      background: #ffffffcc;
-      border: 2px solid #ffe0ef;
-      border-radius: 18px;
-      padding: 8px 10px;
-      font-size: 14px;
-      box-shadow: 0 12px 25px rgba(0,0,0,.10);
-      z-index:2;
+      top: 12px;
+      right: 12px;
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      border: 0;
+      cursor:pointer;
+      font-weight:900;
+      font-size: 18px;
+      line-height: 40px;
+      color:#6b6b6b;
+      background: linear-gradient(135deg, #ffffff, #fff0f7);
+      border: 2px solid #ffd2e6;
+      box-shadow: 0 14px 28px rgba(0,0,0,.10);
     }
+    .closeResult:hover{ transform: translateY(-1px); }
 
     .choice{
       margin-top: 12px;
@@ -284,20 +310,6 @@
       background: linear-gradient(135deg, var(--pink), var(--lav));
       box-shadow: 0 16px 35px rgba(0,0,0,.18);
       text-transform: uppercase;
-    }
-
-    .backRow{
-      margin-top: 12px;
-      display:flex;
-      justify-content:center;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    #backBtn{
-      background: linear-gradient(135deg, #ffffff, #fff0f7);
-      border: 2px solid #ffd2e6;
-      color:#5b5b5b;
-      box-shadow: 0 14px 28px rgba(0,0,0,.08);
     }
 
     @media (max-width: 430px){
@@ -327,16 +339,14 @@
         </div>
 
         <div class="result" id="result">
+          <!-- X per tornare indietro -->
+          <button class="closeResult" id="closeResult" type="button" aria-label="Chiudi">✕</button>
+
           <div class="photoFrame">
-            <div class="sticker">✨ chibi vibes</div>
             <img id="resultImg" alt="Foto" src="casina.jpg" />
           </div>
 
           <div class="choice" id="choiceText">SAGGIA SCELTA 💖</div>
-
-          <div class="backRow">
-            <button id="backBtn" type="button">↩ Torna indietro</button>
-          </div>
         </div>
       </div>
     </div>
@@ -344,14 +354,14 @@
 
   <!-- MODAL -->
   <div class="modalBackdrop" id="modalBackdrop" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal" id="modalBox" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <div class="modalHeader">
-        <div class="modalTitle" id="modalTitle">Messaggio importante</div>
+        <div class="modalTitle" id="modalTitle">NO?!?</div>
         <button class="closeX" id="closeX" type="button" aria-label="Chiudi">✕</button>
       </div>
       <div class="modalBody">
-        <span class="emoji">😤💢</span>
-        <div><b>Vuoi schiaffoni?</b></div>
+        <span class="emoji">😡💢</span>
+        <div class="angryText">Vuoi schiaffoni?!</div>
       </div>
     </div>
   </div>
@@ -381,11 +391,12 @@
     const noBtn  = document.getElementById("noBtn");
     const btnRow = document.getElementById("btnRow");
     const result = document.getElementById("result");
-    const backBtn = document.getElementById("backBtn");
+    const closeResult = document.getElementById("closeResult");
     const card = document.getElementById("card");
 
     const modalBackdrop = document.getElementById("modalBackdrop");
     const closeX = document.getElementById("closeX");
+    const modalBox = document.getElementById("modalBox");
 
     let noIsEvasive = false;
 
@@ -393,11 +404,28 @@
       modalBackdrop.style.display = "flex";
       modalBackdrop.setAttribute("aria-hidden", "false");
       closeX.focus();
+
+      // shake più "rabbioso"
+      modalBox.animate(
+        [
+          {transform:"translateX(0)"},
+          {transform:"translateX(-10px)"},
+          {transform:"translateX(10px)"},
+          {transform:"translateX(-8px)"},
+          {transform:"translateX(8px)"},
+          {transform:"translateX(0)"}
+        ],
+        {duration: 280, easing:"ease-out"}
+      );
     }
 
     function closeModal(){
       modalBackdrop.style.display = "none";
       modalBackdrop.setAttribute("aria-hidden", "true");
+      activateNoEvasive();
+    }
+
+    function activateNoEvasive(){
       noIsEvasive = true;
 
       // Metti NO in absolute nello stesso punto (così scappa di pochi pixel, non sparisce)
@@ -408,6 +436,13 @@
       noBtn.style.top  = (btnRect.top  - cardRect.top)  + "px";
     }
 
+    function resetNoNormal(){
+      noIsEvasive = false;
+      noBtn.style.position = "relative";
+      noBtn.style.left = "";
+      noBtn.style.top = "";
+    }
+
     // NO: prima popup, poi non cliccabile
     noBtn.addEventListener("click", () => {
       if (noIsEvasive) return;
@@ -416,13 +451,20 @@
 
     closeX.addEventListener("click", closeModal);
 
-    // Non chiudere cliccando fuori, solo shake
+    // Non chiudere cliccando fuori
     modalBackdrop.addEventListener("click", (e) => {
       if(e.target === modalBackdrop){
-        const modal = modalBackdrop.querySelector(".modal");
-        modal.animate(
-          [{transform:"translateX(0)"},{transform:"translateX(-8px)"},{transform:"translateX(8px)"},{transform:"translateX(0)"}],
-          {duration: 260, easing:"ease-out"}
+        // shake ancora più forte se cliccano fuori
+        modalBox.animate(
+          [
+            {transform:"translateX(0)"},
+            {transform:"translateX(-12px)"},
+            {transform:"translateX(12px)"},
+            {transform:"translateX(-10px)"},
+            {transform:"translateX(10px)"},
+            {transform:"translateX(0)"}
+          ],
+          {duration: 300, easing:"ease-out"}
         );
       }
     });
@@ -432,28 +474,22 @@
       btnRow.style.display = "none";
       result.style.display = "block";
       result.scrollIntoView({behavior:"smooth", block:"nearest"});
-      noIsEvasive = true; // anche dopo sì, NO non deve più essere cliccabile
+
+      // se vuoi che NO diventi subito “scattante” anche dopo sì:
+      // activateNoEvasive();
     });
 
-    // Torna indietro: ripristina tutto
-    backBtn.addEventListener("click", () => {
+    // X nel risultato: torna indietro (ripristina anche NO normale)
+    closeResult.addEventListener("click", () => {
       result.style.display = "none";
       btnRow.style.display = "flex";
-
-      // Reset NO posizione (torna “normale”)
-      noBtn.style.position = "relative";
-      noBtn.style.left = "";
-      noBtn.style.top = "";
-
-      // Se vuoi che dopo il ritorno il NO continui a scappare comunque, lascia true.
-      // Se invece vuoi che torni “cliccabile” come all’inizio, metti false.
-      noIsEvasive = false;
+      resetNoNormal(); // ✅ così non “sparisce” e torna normale
     });
 
-    // NO che scappa “vicino al mouse” (pochi pixel)
-    const SAFE_RADIUS = 70;
-    const STEP = 8;      // spostamento piccolo
-    const PADDING = 10;  // margine
+    // NO che scappa “vicino al mouse” (pochi pixel, effetto non mi prendi)
+    const SAFE_RADIUS = 75;
+    const STEP = 10;     // piccoli scatti
+    const PADDING = 10;
 
     function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
 
@@ -470,6 +506,7 @@
       const dist = Math.hypot(dx, dy);
       if (dist > SAFE_RADIUS) return;
 
+      // direzione via dal mouse
       const ux = dx / (dist || 1);
       const uy = dy / (dist || 1);
 
@@ -483,7 +520,7 @@
       const maxTop  = cardRect.height - btnRect.height - PADDING;
 
       newLeft = clamp(newLeft, PADDING, maxLeft);
-      newTop  = clamp(newTop,  90,      maxTop); // evita titolo
+      newTop  = clamp(newTop,  90,      maxTop);
 
       noBtn.style.left = newLeft + "px";
       noBtn.style.top  = newTop  + "px";
@@ -491,7 +528,7 @@
 
     document.addEventListener("mousemove", (e) => {
       if (!noIsEvasive) return;
-      if (noBtn.style.position !== "absolute") return; // scappa solo dopo che è diventato absolute
+      if (noBtn.style.position !== "absolute") return;
       nudgeAway(e.clientX, e.clientY);
     });
 
