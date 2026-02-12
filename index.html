@@ -56,6 +56,17 @@
       filter: drop-shadow(0 10px 16px rgba(255,95,162,.18));
       opacity:.92;
     }
+    @keyframes fadeAdvice{
+    from{
+    opacity:0;
+    transform:translateY(-8px);
+    }
+    to{
+    opacity:1;
+    transform:translateY(0);
+    }
+    }
+
     @keyframes floatUp{
       from{ transform: translateY(110vh) rotate(0deg); opacity:0; }
       12%{ opacity:1; }
@@ -456,11 +467,27 @@
 
       <h1>Vuoi essere il mio Valentino? 💖</h1>
 
-      <div class="stage">
-        <div class="btnRow" id="btnRow">
-          <button id="yesBtn" type="button">SÌ 💘</button>
-          <button id="noBtn" type="button">NO 🙈</button>
-        </div>
+<div class="stage">
+
+  <div id="adviceText" style="
+    display:none;
+    text-align:center;
+    font-size:22px;
+    font-weight:800;
+    color:#ff5fa2;
+    margin-top:10px;
+    animation:fadeAdvice .4s ease;
+  ">
+    Fai la scelta giusta 💖
+  </div>
+
+  <div class="btnRow" id="btnRow">
+    <button id="yesBtn" type="button">SÌ 💘</button>
+    <button id="noBtn" type="button">NO 🙈</button>
+  </div>
+
+</div>
+
 
         <div class="result" id="result">
           <button class="closeResult" id="closeResult" type="button" aria-label="Chiudi">✕</button>
@@ -650,12 +677,16 @@
 
     // SÌ: mostra risultato
     yesBtn.addEventListener("click", () => {
+    
+      // NASCONDE FRASE
+      document.getElementById("adviceText").style.display = "none";
+    
       const r = yesBtn.getBoundingClientRect();
       popHearts(r.left + r.width/2, r.top + r.height/2);
-
+    
       btnRow.style.display = "none";
       result.style.display = "block";
-
+    
       requestAnimationFrame(() => {
         result.scrollIntoView({ behavior: "smooth", block: "start" });
       });
@@ -689,11 +720,18 @@
     }
 
     function goBackToStart(){
-      result.style.display = "none";
-      btnRow.style.display = "flex";
-      resetNo();
-      forceScrollHome();
+    
+      result.style.display = "none"
+      btnRow.style.display = "flex"
+    
+      resetNo()
+    
+      // MOSTRA FRASE
+      document.getElementById("adviceText").style.display = "block"
+    
     }
+
+
 
     closeResult.addEventListener("click", goBackToStart);
     choiceBtn.addEventListener("click", goBackToStart);
