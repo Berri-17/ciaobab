@@ -21,12 +21,14 @@
       --shadow: 0 18px 50px rgba(0,0,0,.12);
       --radius: 28px;
 
-      --angry1:#ff3b3b;
-      --angry2:#ff7a18;
+      --angry1:#ff1f1f;
+      --angry2:#ff6a00;
+      --angry3:#b10000;
     }
 
     *{ box-sizing:border-box; }
     html,body{ height:100%; }
+
     body{
       margin:0;
       color:var(--ink);
@@ -35,29 +37,84 @@
         radial-gradient(1100px 700px at 20% 20%, var(--bg1), transparent 60%),
         radial-gradient(900px 600px at 80% 30%, var(--bg2), transparent 60%),
         linear-gradient(180deg, #fff, #ffe7f2);
-      overflow:auto; /* ✅ */
+      overflow:auto;
     }
 
-    /* cuoricini */
+    /* ===== BACKGROUND ROMANTICO ===== */
     .hearts{
       position:fixed; inset:0;
       pointer-events:none;
-      opacity:.55;
-      filter: blur(.1px);
       z-index:0;
     }
     .heart{
       position:absolute;
-      font-size: clamp(14px, 2vw, 22px);
-      animation: floatUp linear infinite;
       transform: translateY(110vh);
       user-select:none;
       will-change: transform, opacity;
+      animation: floatUp linear infinite;
+      filter: drop-shadow(0 10px 16px rgba(255,95,162,.18));
+      opacity:.9;
     }
     @keyframes floatUp{
       from{ transform: translateY(110vh) rotate(0deg); opacity:0; }
       12%{ opacity:1; }
       to{ transform: translateY(-25vh) rotate(18deg); opacity:0; }
+    }
+
+    .twinkles{
+      position:fixed; inset:0;
+      pointer-events:none;
+      z-index:0;
+    }
+    .tw{
+      position:absolute;
+      font-size: clamp(14px, 3.2vw, 22px);
+      opacity:.9;
+      animation: twinkle 1.6s ease-in-out infinite;
+      filter: drop-shadow(0 10px 18px rgba(255,200,80,.22));
+      user-select:none;
+    }
+    @keyframes twinkle{
+      0%,100%{ transform: scale(.9); opacity:.4; }
+      50%{ transform: scale(1.15); opacity:1; }
+    }
+
+    /* romantic overlay sopra la card (visibile anche su telefono) */
+    .overlayLove{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:3;
+      opacity:.28;
+    }
+    .overlayLove .float{
+      position:absolute;
+      font-size: clamp(18px, 5vw, 28px);
+      animation: drift 8s linear infinite;
+      transform: translateY(110vh);
+      user-select:none;
+      will-change: transform, opacity;
+      filter: drop-shadow(0 12px 18px rgba(255,95,162,.18));
+    }
+    @keyframes drift{
+      from{ transform: translateY(110vh) rotate(0deg); opacity:0; }
+      15%{ opacity:1; }
+      to{ transform: translateY(-25vh) rotate(12deg); opacity:0; }
+    }
+
+    /* cuori “pop” quando tocchi/clicchi */
+    .pop{
+      position:fixed;
+      z-index:99;
+      pointer-events:none;
+      font-size: 22px;
+      animation: popFly .9s ease-out forwards;
+      filter: drop-shadow(0 12px 18px rgba(255,95,162,.25));
+      will-change: transform, opacity;
+    }
+    @keyframes popFly{
+      0%{ transform: translate(-50%,-50%) scale(.9); opacity:1; }
+      100%{ transform: translate(-50%,-120px) scale(1.25); opacity:0; }
     }
 
     .wrap{
@@ -138,7 +195,6 @@
       padding-top: 10px;
     }
 
-    /* container bottoni: serve perché NO poi diventa absolute relativo a questo */
     .btnRow{
       display:flex;
       gap:14px;
@@ -147,7 +203,7 @@
       flex-wrap:wrap;
       margin-top: 14px;
       position:relative;
-      min-height: 120px; /* un po' di spazio per farlo “scappare” dentro */
+      min-height: 140px;
     }
 
     button{
@@ -178,46 +234,63 @@
       position:relative;
     }
 
-    /* POPUP arrabbiato */
+    /* ===== POPUP ARRABBIATO ===== */
     .modalBackdrop{
       position:fixed; inset:0;
-      background: rgba(20, 10, 25, .42);
+      background: rgba(120, 0, 0, .32); /* più rosso */
       display:none;
       align-items:center;
       justify-content:center;
       padding: 18px;
       z-index: 50;
     }
+
+    /* glow rosso pulsante */
+    @keyframes rageGlow{
+      0%,100%{
+        box-shadow: 0 28px 90px rgba(0,0,0,.35),
+                    0 0 0 0 rgba(255,0,0,.0),
+                    0 0 40px 6px rgba(255,40,40,.25);
+      }
+      50%{
+        box-shadow: 0 28px 90px rgba(0,0,0,.35),
+                    0 0 0 0 rgba(255,0,0,.0),
+                    0 0 60px 14px rgba(255,40,40,.45);
+      }
+    }
+
     .modal{
       width:min(420px, 92vw);
       background: white;
       border-radius: 22px;
-      box-shadow: 0 28px 80px rgba(0,0,0,.28);
-      border: 3px solid #ffd1d1;
+      border: 4px solid #ff6a6a;
       overflow:hidden;
+      animation: rageGlow 1.1s ease-in-out infinite;
     }
+
     .modalHeader{
       padding: 16px 16px 10px;
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      background: linear-gradient(135deg, #fff2f2, #fff7ea);
-      border-bottom: 2px solid #ffe1e1;
+      background: linear-gradient(135deg, #ffd6d6, #fff1e4);
+      border-bottom: 2px solid #ffbcbc;
     }
     .modalTitle{
       font-weight:900;
       font-size: 18px;
-      color:#b10000;
+      color: var(--angry3);
       letter-spacing:.2px;
+      text-transform: uppercase;
     }
     .closeX{
       width: 40px;
       height: 40px;
       border-radius: 14px;
       border: 0;
-      background: linear-gradient(135deg, #fff, #fff0f0);
-      box-shadow: 0 12px 28px rgba(0,0,0,.14);
+      background: linear-gradient(135deg, #fff, #ffe7e7);
+      box-shadow: 0 12px 28px rgba(0,0,0,.18);
       cursor:pointer;
       font-weight:900;
       font-size: 18px;
@@ -227,25 +300,29 @@
       padding: 18px 16px 18px;
       text-align:center;
       font-size: 16px;
+      background:
+        radial-gradient(220px 140px at 20% 10%, rgba(255,0,0,.10), transparent 60%),
+        radial-gradient(220px 140px at 80% 20%, rgba(255,110,0,.12), transparent 60%),
+        #fff;
     }
     .modalBody .emoji{
-      font-size: 38px;
+      font-size: 44px;
       display:block;
-      margin-bottom: 8px;
-      filter: drop-shadow(0 10px 18px rgba(255,60,60,.25));
+      margin-bottom: 10px;
+      filter: drop-shadow(0 12px 18px rgba(255,40,40,.35));
     }
     .angryText{
       display:inline-block;
-      margin-top: 10px;
-      padding: 10px 12px;
+      margin-top: 8px;
+      padding: 10px 14px;
       border-radius: 16px;
       color:#fff;
       font-weight:900;
       background: linear-gradient(135deg, var(--angry1), var(--angry2));
-      box-shadow: 0 16px 35px rgba(255,60,60,.25);
+      box-shadow: 0 18px 40px rgba(255,60,60,.28);
     }
 
-    /* RISULTATO */
+    /* ===== RISULTATO ===== */
     .result{
       display:none;
       margin-top: 18px;
@@ -299,7 +376,7 @@
 
     .choice{
       margin-top: 12px;
-      padding: 12px 16px;
+      padding: 14px 16px;
       border-radius: 18px;
       color:#fff;
       font-weight: 900;
@@ -308,11 +385,27 @@
       background: linear-gradient(135deg, var(--pink), var(--lav));
       box-shadow: 0 16px 35px rgba(0,0,0,.18);
       text-transform: uppercase;
+      cursor:pointer;
+      user-select:none;
+    }
+    .choice:active{ transform: translateY(1px); }
+
+    .subChoice{
+      margin-top: 10px;
+      text-align:center;
+      font-size: 18px;
+      font-weight: 700;
+      color:#5a3a4a;
+      padding: 10px 12px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #ffffff, #fff0f7);
+      border: 1px solid #ffd2e6;
+      box-shadow: 0 10px 22px rgba(255,95,162,.12);
     }
 
     @media (max-width: 430px){
       button{ width: 100%; max-width: 320px; }
-      .btnRow{ min-height: 160px; }
+      .btnRow{ min-height: 170px; }
       .photoFrame img{ height: 62vh; }
     }
   </style>
@@ -320,6 +413,8 @@
 
 <body>
   <div class="hearts" id="hearts"></div>
+  <div class="twinkles" id="twinkles"></div>
+  <div class="overlayLove" id="overlayLove"></div>
 
   <div class="wrap">
     <div class="card" id="card">
@@ -343,7 +438,8 @@
             <img id="resultImg" alt="Foto" src="casina.jpg" />
           </div>
 
-          <div class="choice">SAGGIA SCELTA 💖</div>
+          <div class="choice" id="choiceBtn">SAGGIA SCELTA 💖</div>
+          <div class="subChoice">festeggiamo nella nostra casina carina?</div>
         </div>
       </div>
     </div>
@@ -364,26 +460,78 @@
   </div>
 
   <script>
-    // Cuoricini/stelline
+    const isMobile = window.matchMedia("(max-width: 520px)").matches;
+    function rand(min, max){ return Math.random() * (max - min) + min; }
+
+    // ===== Hearts (più grandi e tanti su mobile) =====
     const hearts = document.getElementById("hearts");
-    const heartChars = ["💗","💖","💘","💕","💞","💓","✨","🌸","🫶"];
-    for(let i=0;i<24;i++){
+    const heartChars = ["💗","💖","💘","💕","💞","💓","💝","✨","🌸","🫶","🥰","💫"];
+    const HEART_COUNT = isMobile ? 70 : 48;
+
+    for(let i=0;i<HEART_COUNT;i++){
       const s = document.createElement("div");
       s.className = "heart";
       s.textContent = heartChars[Math.floor(Math.random()*heartChars.length)];
-      s.style.left = (Math.random()*100) + "vw";
-      s.style.animationDuration = (7 + Math.random()*8) + "s";
-      s.style.animationDelay = (Math.random()*9) + "s";
-      s.style.opacity = (0.25 + Math.random()*0.5);
-      s.style.filter = `blur(${Math.random()*0.7}px)`;
+      s.style.left = rand(0, 100) + "vw";
+      s.style.animationDuration = rand(isMobile ? 5.5 : 7, isMobile ? 12 : 15) + "s";
+      s.style.animationDelay = rand(0, 10) + "s";
+      const size = rand(isMobile ? 18 : 14, isMobile ? 34 : 26);
+      s.style.fontSize = size + "px";
+      s.style.opacity = rand(.55, .95);
       hearts.appendChild(s);
     }
 
+    // ===== Twinkles =====
+    const twinkles = document.getElementById("twinkles");
+    const TW_COUNT = isMobile ? 18 : 12;
+    for(let i=0;i<TW_COUNT;i++){
+      const t = document.createElement("div");
+      t.className = "tw";
+      t.textContent = (Math.random() < .6) ? "✨" : "💫";
+      t.style.left = rand(4, 96) + "vw";
+      t.style.top  = rand(6, 94) + "vh";
+      t.style.animationDelay = rand(0, 2.2) + "s";
+      twinkles.appendChild(t);
+    }
+
+    // ===== Overlay sopra card =====
+    const overlayLove = document.getElementById("overlayLove");
+    const overlayChars = ["💖","💗","💕","✨","💞","💘","💝","🌸","💫"];
+    const OVERLAY_COUNT = isMobile ? 18 : 10;
+
+    for(let i=0;i<OVERLAY_COUNT;i++){
+      const el = document.createElement("div");
+      el.className = "float";
+      el.textContent = overlayChars[Math.floor(Math.random()*overlayChars.length)];
+      el.style.left = rand(0, 100) + "vw";
+      el.style.animationDuration = rand(6, 12) + "s";
+      el.style.animationDelay = rand(0, 6) + "s";
+      overlayLove.appendChild(el);
+    }
+
+    // ===== Pop hearts =====
+    function popHearts(x, y){
+      const chars = ["💖","💗","💕","✨","💞"];
+      for(let i=0;i<6;i++){
+        const p = document.createElement("div");
+        p.className = "pop";
+        p.textContent = chars[Math.floor(Math.random()*chars.length)];
+        p.style.left = (x + rand(-18, 18)) + "px";
+        p.style.top  = (y + rand(-10, 10)) + "px";
+        p.style.fontSize = rand(18, 28) + "px";
+        p.style.animationDuration = rand(.7, 1.0) + "s";
+        document.body.appendChild(p);
+        setTimeout(()=>p.remove(), 1200);
+      }
+    }
+
+    // ===== UI =====
     const yesBtn = document.getElementById("yesBtn");
     const noBtn  = document.getElementById("noBtn");
     const btnRow = document.getElementById("btnRow");
     const result = document.getElementById("result");
     const closeResult = document.getElementById("closeResult");
+    const choiceBtn = document.getElementById("choiceBtn");
 
     const modalBackdrop = document.getElementById("modalBackdrop");
     const closeX = document.getElementById("closeX");
@@ -391,9 +539,16 @@
 
     let noIsEvasive = false;
 
-    function shakeAngry(){
+    function shakeAngry(hard=false){
       modalBox.animate(
-        [
+        hard ? [
+          {transform:"translateX(0) rotate(0deg)"},
+          {transform:"translateX(-14px) rotate(-1deg)"},
+          {transform:"translateX(14px) rotate(1deg)"},
+          {transform:"translateX(-12px) rotate(-1deg)"},
+          {transform:"translateX(12px) rotate(1deg)"},
+          {transform:"translateX(0) rotate(0deg)"}
+        ] : [
           {transform:"translateX(0)"},
           {transform:"translateX(-10px)"},
           {transform:"translateX(10px)"},
@@ -401,7 +556,7 @@
           {transform:"translateX(8px)"},
           {transform:"translateX(0)"}
         ],
-        {duration: 280, easing:"ease-out"}
+        {duration: hard ? 320 : 280, easing:"ease-out"}
       );
     }
 
@@ -409,13 +564,16 @@
       modalBackdrop.style.display = "flex";
       modalBackdrop.setAttribute("aria-hidden", "false");
       closeX.focus();
-      shakeAngry();
+      shakeAngry(true);
     }
 
     function closeModal(){
       modalBackdrop.style.display = "none";
       modalBackdrop.setAttribute("aria-hidden", "true");
-      noIsEvasive = true; // ✅ da qui in poi NO diventa imprendibile
+      noIsEvasive = true;
+
+      const r = noBtn.getBoundingClientRect();
+      popHearts(r.left + r.width/2, r.top + r.height/2);
     }
 
     // NO: prima popup, poi “teletrasporto”
@@ -424,12 +582,10 @@
         openModal();
         return;
       }
-      // dopo popup: non deve essere cliccabile -> scappa spostandosi
       e.preventDefault();
       moveNoRandom();
     });
 
-    // Anche su mobile: quando provano a toccare NO dopo popup, si sposta
     noBtn.addEventListener("touchstart", (e) => {
       if(!noIsEvasive) return;
       e.preventDefault();
@@ -440,12 +596,15 @@
 
     modalBackdrop.addEventListener("click", (e) => {
       if(e.target === modalBackdrop){
-        shakeAngry();
+        shakeAngry(true); // più rabbia se cliccano fuori
       }
     });
 
-    // SÌ: mostra risultato e nasconde bottoni
+    // SÌ: mostra risultato
     yesBtn.addEventListener("click", () => {
+      const r = yesBtn.getBoundingClientRect();
+      popHearts(r.left + r.width/2, r.top + r.height/2);
+
       btnRow.style.display = "none";
       result.style.display = "block";
       requestAnimationFrame(() => {
@@ -453,21 +612,28 @@
       });
     });
 
-    // X risultato: torna indietro e reset NO
-    closeResult.addEventListener("click", () => {
+    function goBackToStart(){
       result.style.display = "none";
       btnRow.style.display = "flex";
       noIsEvasive = false;
-      // rimetti NO “normale”
+
       noBtn.style.position = "relative";
       noBtn.style.left = "";
       noBtn.style.top = "";
-    });
+    }
+
+    closeResult.addEventListener("click", goBackToStart);
+
+    // clic su SAGGIA SCELTA torna indietro
+    choiceBtn.addEventListener("click", goBackToStart);
+    choiceBtn.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      goBackToStart();
+    }, {passive:false});
 
     function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
 
     function moveNoRandom(){
-      // il bottone si muove DENTRO la btnRow (così non sparisce)
       const rowRect = btnRow.getBoundingClientRect();
       const btnRect = noBtn.getBoundingClientRect();
 
@@ -475,11 +641,9 @@
       const maxX = rowRect.width - btnRect.width - padding;
       const maxY = rowRect.height - btnRect.height - padding;
 
-      // random dentro l’area bottoni
       const x = clamp(Math.random()*maxX, padding, maxX);
       const y = clamp(Math.random()*maxY, padding, maxY);
 
-      // rendilo absolute RELATIVO alla btnRow
       noBtn.style.position = "absolute";
       noBtn.style.left = x + "px";
       noBtn.style.top  = y + "px";
