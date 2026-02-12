@@ -24,6 +24,7 @@
       --angry1:#ff1f1f;
       --angry2:#ff6a00;
       --angry3:#b10000;
+      --angryBg: rgba(160,0,0,.36);
     }
 
     *{ box-sizing:border-box; }
@@ -37,17 +38,15 @@
         radial-gradient(1100px 700px at 20% 20%, var(--bg1), transparent 60%),
         radial-gradient(900px 600px at 80% 30%, var(--bg2), transparent 60%),
         linear-gradient(180deg, #fff, #ffe7f2);
-      overflow:auto;
+      overflow:auto; /* IMPORTANT: iPhone */
     }
 
     /* ===== BACKGROUND ROMANTICO ===== */
-    .hearts, .twinkles, .overlayLove, .angryBg{
+    .hearts{
       position:fixed; inset:0;
       pointer-events:none;
       z-index:0;
     }
-
-    /* cuori che salgono */
     .heart{
       position:absolute;
       transform: translateY(110vh);
@@ -55,7 +54,7 @@
       will-change: transform, opacity;
       animation: floatUp linear infinite;
       filter: drop-shadow(0 10px 16px rgba(255,95,162,.18));
-      opacity:.9;
+      opacity:.92;
     }
     @keyframes floatUp{
       from{ transform: translateY(110vh) rotate(0deg); opacity:0; }
@@ -63,7 +62,11 @@
       to{ transform: translateY(-25vh) rotate(18deg); opacity:0; }
     }
 
-    /* stelline che lampeggiano */
+    .twinkles{
+      position:fixed; inset:0;
+      pointer-events:none;
+      z-index:0;
+    }
     .tw{
       position:absolute;
       font-size: clamp(14px, 3.2vw, 22px);
@@ -77,12 +80,18 @@
       50%{ transform: scale(1.15); opacity:1; }
     }
 
-    /* overlay sopra card (così su mobile si vede) */
-    .overlayLove{ z-index:3; opacity:.28; }
+    /* overlay sopra la card (si vede su mobile) */
+    .overlayLove{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:3;
+      opacity:.30;
+    }
     .overlayLove .float{
       position:absolute;
       font-size: clamp(18px, 5vw, 28px);
-      animation: drift 8s linear infinite;
+      animation: drift linear infinite;
       transform: translateY(110vh);
       user-select:none;
       will-change: transform, opacity;
@@ -94,37 +103,18 @@
       to{ transform: translateY(-25vh) rotate(12deg); opacity:0; }
     }
 
-    /* cuori “pop” */
+    /* pop cuoricini */
     .pop{
       position:fixed;
       z-index:99;
       pointer-events:none;
-      font-size: 22px;
       animation: popFly .9s ease-out forwards;
       filter: drop-shadow(0 12px 18px rgba(255,95,162,.25));
       will-change: transform, opacity;
     }
     @keyframes popFly{
       0%{ transform: translate(-50%,-50%) scale(.9); opacity:1; }
-      100%{ transform: translate(-50%,-120px) scale(1.25); opacity:0; }
-    }
-
-    /* ===== Sfondo arrabbiato per popup (emoji) ===== */
-    .angryBg{ z-index:2; display:none; opacity:.75; }
-    .angryFace{
-      position:absolute;
-      transform: translateY(110vh);
-      user-select:none;
-      will-change: transform, opacity;
-      animation: angryFloat linear infinite;
-      filter: drop-shadow(0 14px 22px rgba(255,40,40,.20));
-      opacity:.9;
-      font-size: clamp(18px, 5vw, 30px);
-    }
-    @keyframes angryFloat{
-      from{ transform: translateY(110vh) rotate(0deg); opacity:0; }
-      15%{ opacity:1; }
-      to{ transform: translateY(-25vh) rotate(-10deg); opacity:0; }
+      100%{ transform: translate(-50%,-130px) scale(1.25); opacity:0; }
     }
 
     .wrap{
@@ -148,6 +138,7 @@
       overflow:hidden;
     }
 
+    /* decorazioni chibi */
     .card::before, .card::after{
       content:"";
       position:absolute;
@@ -205,6 +196,7 @@
       padding-top: 10px;
     }
 
+    /* zona bottoni (NO scappa qui dentro dopo popup) */
     .btnRow{
       display:flex;
       gap:14px;
@@ -213,7 +205,7 @@
       flex-wrap:wrap;
       margin-top: 14px;
       position:relative;
-      min-height: 140px;
+      min-height: 170px;
     }
 
     button{
@@ -235,6 +227,7 @@
       color:white;
       box-shadow: 0 16px 35px rgba(255,95,162,.35);
     }
+    #yesBtn:hover{ filter: brightness(1.03); transform: translateY(-1px) scale(1.02); }
 
     #noBtn{
       background: linear-gradient(135deg, #ffffff, #f7f7ff);
@@ -244,25 +237,48 @@
       position:relative;
     }
 
-    /* ===== POPUP ARRABBIATO ===== */
+    /* ===== POPUP ARRABBIATO SUPER ROSSO ===== */
     .modalBackdrop{
       position:fixed; inset:0;
-      background: rgba(160, 0, 0, .30); /* rosso */
+      background: var(--angryBg);
       display:none;
       align-items:center;
       justify-content:center;
       padding: 18px;
       z-index: 50;
+      animation: angryFade .18s ease-out;
+    }
+    @keyframes angryFade{
+      from{ opacity:0; }
+      to{ opacity:1; }
+    }
+
+    /* flash rosso */
+    .flash{
+      position:fixed;
+      inset:0;
+      background: rgba(255,0,0,.18);
+      opacity:0;
+      pointer-events:none;
+      z-index:60;
+    }
+    .flash.on{
+      animation: flashBang .22s ease-out;
+    }
+    @keyframes flashBang{
+      0%{ opacity:0; }
+      40%{ opacity:1; }
+      100%{ opacity:0; }
     }
 
     @keyframes rageGlow{
       0%,100%{
         box-shadow: 0 28px 90px rgba(0,0,0,.35),
-                    0 0 55px 10px rgba(255,40,40,.30);
+                    0 0 45px 10px rgba(255,40,40,.35);
       }
       50%{
         box-shadow: 0 28px 90px rgba(0,0,0,.35),
-                    0 0 75px 18px rgba(255,40,40,.55);
+                    0 0 70px 18px rgba(255,40,40,.55);
       }
     }
 
@@ -270,9 +286,10 @@
       width:min(420px, 92vw);
       background: white;
       border-radius: 22px;
-      border: 4px solid #ff4f4f;
+      border: 5px solid #ff3b3b;
       overflow:hidden;
       animation: rageGlow 1.05s ease-in-out infinite;
+      transform-origin: center;
     }
 
     .modalHeader{
@@ -281,8 +298,8 @@
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      background: linear-gradient(135deg, #ffd0d0, #ffe2cf);
-      border-bottom: 2px solid #ffb3b3;
+      background: linear-gradient(135deg, #ffd0d0, #ffe7d8);
+      border-bottom: 2px solid #ffbcbc;
     }
     .modalTitle{
       font-weight:900;
@@ -292,8 +309,8 @@
       text-transform: uppercase;
     }
     .closeX{
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       border-radius: 14px;
       border: 0;
       background: linear-gradient(135deg, #fff, #ffe7e7);
@@ -301,15 +318,15 @@
       cursor:pointer;
       font-weight:900;
       font-size: 18px;
-      line-height: 40px;
+      line-height: 42px;
     }
     .modalBody{
-      padding: 18px 16px 18px;
+      padding: 18px 16px 20px;
       text-align:center;
       font-size: 16px;
       background:
-        radial-gradient(240px 150px at 25% 10%, rgba(255,0,0,.16), transparent 65%),
-        radial-gradient(240px 150px at 75% 20%, rgba(255,110,0,.16), transparent 65%),
+        radial-gradient(260px 170px at 20% 10%, rgba(255,0,0,.14), transparent 60%),
+        radial-gradient(260px 170px at 80% 20%, rgba(255,110,0,.16), transparent 60%),
         #fff;
     }
     .modalBody .emoji{
@@ -326,7 +343,13 @@
       color:#fff;
       font-weight:900;
       background: linear-gradient(135deg, var(--angry1), var(--angry2));
-      box-shadow: 0 18px 40px rgba(255,60,60,.30);
+      box-shadow: 0 18px 40px rgba(255,60,60,.28);
+    }
+    .angryHint{
+      margin-top: 10px;
+      color:#7a1b1b;
+      font-weight:800;
+      opacity:.9;
     }
 
     /* ===== RISULTATO ===== */
@@ -397,26 +420,22 @@
     }
     .choice:active{ transform: translateY(1px); }
 
-    /* frase romantica migliorata */
     .subChoice{
       margin-top: 10px;
       text-align:center;
       font-size: 18px;
-      font-weight: 800;
+      font-weight: 700;
       color:#5a3a4a;
-      padding: 12px 14px;
-      border-radius: 999px;
+      padding: 10px 12px;
+      border-radius: 18px;
       background: linear-gradient(135deg, #ffffff, #fff0f7);
       border: 1px solid #ffd2e6;
-      box-shadow: 0 12px 26px rgba(255,95,162,.14);
-    }
-    .subChoice .spark{
-      filter: drop-shadow(0 10px 14px rgba(255,95,162,.20));
+      box-shadow: 0 10px 22px rgba(255,95,162,.12);
     }
 
     @media (max-width: 430px){
       button{ width: 100%; max-width: 320px; }
-      .btnRow{ min-height: 170px; }
+      .btnRow{ min-height: 190px; }
       .photoFrame img{ height: 62vh; }
     }
   </style>
@@ -426,7 +445,7 @@
   <div class="hearts" id="hearts"></div>
   <div class="twinkles" id="twinkles"></div>
   <div class="overlayLove" id="overlayLove"></div>
-  <div class="angryBg" id="angryBg"></div>
+  <div class="flash" id="flash"></div>
 
   <div class="wrap">
     <div class="card" id="card">
@@ -435,7 +454,7 @@
         <div class="pill">💌 San Valentino</div>
       </div>
 
-      <h1 id="mainQuestion">Vuoi essere il mio Valentino? 💖</h1>
+      <h1>Vuoi essere il mio Valentino? 💖</h1>
 
       <div class="stage">
         <div class="btnRow" id="btnRow">
@@ -451,12 +470,7 @@
           </div>
 
           <div class="choice" id="choiceBtn">SAGGIA SCELTA 💖</div>
-
-          <div class="subChoice">
-            <span class="spark">✨💗</span>
-            festeggiamo nella nostra casina carina?
-            <span class="spark">💗✨</span>
-          </div>
+          <div class="subChoice">festeggiamo nella nostra casina carina?</div>
         </div>
       </div>
     </div>
@@ -472,6 +486,7 @@
       <div class="modalBody">
         <span class="emoji">😡💢</span>
         <div class="angryText">Vuoi schiaffoni?!</div>
+        <div class="angryHint">Chiudi con la X. 😤</div>
       </div>
     </div>
   </div>
@@ -479,97 +494,68 @@
   <script>
     const isMobile = window.matchMedia("(max-width: 520px)").matches;
     function rand(min, max){ return Math.random() * (max - min) + min; }
+    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
 
-    // ===== Romantic layers =====
+    // ===== Floating hearts =====
     const hearts = document.getElementById("hearts");
-    const twinkles = document.getElementById("twinkles");
-    const overlayLove = document.getElementById("overlayLove");
+    const heartChars = ["💗","💖","💘","💕","💞","💓","💝","✨","🌸","🫶","🥰","💫","💟"];
+    const HEART_COUNT = isMobile ? 80 : 52;
 
-    const heartChars = ["💗","💖","💘","💕","💞","💓","💝","✨","🌸","🫶","🥰","💫"];
-    const HEART_COUNT = isMobile ? 70 : 48;
     for(let i=0;i<HEART_COUNT;i++){
       const s = document.createElement("div");
       s.className = "heart";
       s.textContent = heartChars[Math.floor(Math.random()*heartChars.length)];
       s.style.left = rand(0, 100) + "vw";
-      s.style.animationDuration = rand(isMobile ? 5.5 : 7, isMobile ? 12 : 15) + "s";
+      s.style.animationDuration = rand(isMobile ? 5.0 : 7.0, isMobile ? 12.0 : 16.0) + "s";
       s.style.animationDelay = rand(0, 10) + "s";
-      s.style.fontSize = rand(isMobile ? 18 : 14, isMobile ? 34 : 26) + "px";
-      s.style.opacity = rand(.55, .95);
+      const size = rand(isMobile ? 18 : 14, isMobile ? 36 : 26);
+      s.style.fontSize = size + "px";
+      s.style.opacity = rand(.55, .98);
       hearts.appendChild(s);
     }
 
-    const TW_COUNT = isMobile ? 18 : 12;
+    // ===== Twinkles =====
+    const twinkles = document.getElementById("twinkles");
+    const TW_COUNT = isMobile ? 22 : 12;
     for(let i=0;i<TW_COUNT;i++){
       const t = document.createElement("div");
       t.className = "tw";
       t.textContent = (Math.random() < .6) ? "✨" : "💫";
-      t.style.left = rand(4, 96) + "vw";
+      t.style.left = rand(3, 97) + "vw";
       t.style.top  = rand(6, 94) + "vh";
       t.style.animationDelay = rand(0, 2.2) + "s";
       twinkles.appendChild(t);
     }
 
-    const overlayChars = ["💖","💗","💕","✨","💞","💘","💝","🌸","💫"];
-    const OVERLAY_COUNT = isMobile ? 18 : 10;
+    // ===== Overlay sopra card =====
+    const overlayLove = document.getElementById("overlayLove");
+    const overlayChars = ["💖","💗","💕","✨","💞","💘","💝","🌸","💫","🫶"];
+    const OVERLAY_COUNT = isMobile ? 22 : 10;
+
     for(let i=0;i<OVERLAY_COUNT;i++){
       const el = document.createElement("div");
       el.className = "float";
       el.textContent = overlayChars[Math.floor(Math.random()*overlayChars.length)];
       el.style.left = rand(0, 100) + "vw";
-      el.style.animationDuration = rand(6, 12) + "s";
+      el.style.animationDuration = rand(6, 13) + "s";
       el.style.animationDelay = rand(0, 6) + "s";
       overlayLove.appendChild(el);
     }
 
-    function setRomanticVisible(on){
-      hearts.style.display = on ? "block" : "none";
-      twinkles.style.display = on ? "block" : "none";
-      overlayLove.style.display = on ? "block" : "none";
-    }
-
-    // ===== Angry background (emoji) =====
-    const angryBg = document.getElementById("angryBg");
-    const angryChars = ["😡","😠","🤬","💢","🔥"];
-    const ANGRY_COUNT = isMobile ? 26 : 18;
-
-    function buildAngryBg(){
-      angryBg.innerHTML = "";
-      for(let i=0;i<ANGRY_COUNT;i++){
-        const a = document.createElement("div");
-        a.className = "angryFace";
-        a.textContent = angryChars[Math.floor(Math.random()*angryChars.length)];
-        a.style.left = rand(0, 100) + "vw";
-        a.style.animationDuration = rand(5.5, 10) + "s";
-        a.style.animationDelay = rand(0, 6) + "s";
-        a.style.opacity = rand(.45, .9);
-        angryBg.appendChild(a);
-      }
-    }
-
-    function showAngryBg(){
-      buildAngryBg();
-      angryBg.style.display = "block";
-      setRomanticVisible(false); // ✅ niente cuori in popup
-    }
-    function hideAngryBg(){
-      angryBg.style.display = "none";
-      setRomanticVisible(true); // ✅ tornano cuori dopo
-    }
-
     // ===== Pop hearts =====
     function popHearts(x, y){
-      const chars = ["💖","💗","💕","✨","💞"];
-      for(let i=0;i<6;i++){
+      const chars = ["💖","💗","💕","✨","💞","💘"];
+      const count = isMobile ? 8 : 6;
+      for(let i=0;i<count;i++){
         const p = document.createElement("div");
         p.className = "pop";
         p.textContent = chars[Math.floor(Math.random()*chars.length)];
-        p.style.left = (x + rand(-18, 18)) + "px";
-        p.style.top  = (y + rand(-10, 10)) + "px";
-        p.style.fontSize = rand(18, 28) + "px";
-        p.style.animationDuration = rand(.7, 1.0) + "s";
+        p.style.left = (x + rand(-22, 22)) + "px";
+        p.style.top  = (y + rand(-12, 12)) + "px";
+        p.style.fontSize = rand(isMobile ? 20 : 18, isMobile ? 30 : 26) + "px";
+        p.style.animationDuration = rand(.7, 1.05) + "s";
         document.body.appendChild(p);
-        setTimeout(()=>p.remove(), 1200);
+        setTimeout(()=>p.remove(), 1300);
       }
     }
 
@@ -577,6 +563,7 @@
     const yesBtn = document.getElementById("yesBtn");
     const noBtn  = document.getElementById("noBtn");
     const btnRow = document.getElementById("btnRow");
+
     const result = document.getElementById("result");
     const closeResult = document.getElementById("closeResult");
     const choiceBtn = document.getElementById("choiceBtn");
@@ -584,8 +571,17 @@
     const modalBackdrop = document.getElementById("modalBackdrop");
     const closeX = document.getElementById("closeX");
     const modalBox = document.getElementById("modalBox");
+    const flash = document.getElementById("flash");
+    const card = document.getElementById("card");
 
     let noIsEvasive = false;
+
+    function flashRed(){
+      flash.classList.remove("on");
+      // reflow
+      void flash.offsetWidth;
+      flash.classList.add("on");
+    }
 
     function shakeAngry(hard=false){
       modalBox.animate(
@@ -609,24 +605,26 @@
     }
 
     function openModal(){
-      showAngryBg(); // ✅ emoji arrabbiate, no cuori
       modalBackdrop.style.display = "flex";
       modalBackdrop.setAttribute("aria-hidden", "false");
       closeX.focus();
+      flashRed();
       shakeAngry(true);
+
+      // piccolo “thump” (solo vibrazione se disponibile)
+      if (navigator.vibrate) navigator.vibrate([40,20,40]);
     }
 
     function closeModal(){
       modalBackdrop.style.display = "none";
       modalBackdrop.setAttribute("aria-hidden", "true");
-      hideAngryBg(); // ✅ tornano cuori
-
       noIsEvasive = true;
+
       const r = noBtn.getBoundingClientRect();
       popHearts(r.left + r.width/2, r.top + r.height/2);
     }
 
-    // NO: prima popup, poi “teletrasporto”
+    // NO: prima popup, poi scappa/teletrasporta (mobile friendly)
     noBtn.addEventListener("click", (e) => {
       if(!noIsEvasive){
         openModal();
@@ -635,7 +633,6 @@
       e.preventDefault();
       moveNoRandom();
     });
-
     noBtn.addEventListener("touchstart", (e) => {
       if(!noIsEvasive) return;
       e.preventDefault();
@@ -643,10 +640,11 @@
     }, {passive:false});
 
     closeX.addEventListener("click", closeModal);
-
     modalBackdrop.addEventListener("click", (e) => {
       if(e.target === modalBackdrop){
+        flashRed();
         shakeAngry(true);
+        if (navigator.vibrate) navigator.vibrate([30,15,30]);
       }
     });
 
@@ -657,38 +655,55 @@
 
       btnRow.style.display = "none";
       result.style.display = "block";
+
       requestAnimationFrame(() => {
         result.scrollIntoView({ behavior: "smooth", block: "start" });
       });
     });
 
-    function goBackToStart(){
-      result.style.display = "none";
-      btnRow.style.display = "flex";
+    function resetNo(){
       noIsEvasive = false;
-    
       noBtn.style.position = "relative";
       noBtn.style.left = "";
       noBtn.style.top = "";
-    
-      // ✅ torna su (così rivedi la schermata iniziale completa)
-      requestAnimationFrame(() => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      });
+    }
+
+    // iPhone Safari FIX: torna davvero su
+    function forceScrollHome(){
+      // dopo il reflow, forza scroll su vari target
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+
+        card.scrollIntoView({ behavior: "smooth", block: "start" });
+
+        // Safari sometimes needs a second nudge
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+          card.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 140);
+      }, 60);
+    }
+
+    function goBackToStart(){
+      result.style.display = "none";
+      btnRow.style.display = "flex";
+      resetNo();
+      forceScrollHome();
     }
 
     closeResult.addEventListener("click", goBackToStart);
-
-    // clic su SAGGIA SCELTA torna indietro (schermata completa)
     choiceBtn.addEventListener("click", goBackToStart);
     choiceBtn.addEventListener("touchstart", (e) => {
       e.preventDefault();
       goBackToStart();
     }, {passive:false});
 
-    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
-
     function moveNoRandom(){
+      // muovi NO DENTRO btnRow (così non scompare mai)
       const rowRect = btnRow.getBoundingClientRect();
       const btnRect = noBtn.getBoundingClientRect();
 
@@ -702,6 +717,9 @@
       noBtn.style.position = "absolute";
       noBtn.style.left = x + "px";
       noBtn.style.top  = y + "px";
+
+      // pop romantico mentre scappa
+      popHearts(rowRect.left + x + btnRect.width/2, rowRect.top + y + btnRect.height/2);
     }
   </script>
 </body>
