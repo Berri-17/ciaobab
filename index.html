@@ -41,11 +41,13 @@
     }
 
     /* ===== BACKGROUND ROMANTICO ===== */
-    .hearts{
+    .hearts, .twinkles, .overlayLove, .angryBg{
       position:fixed; inset:0;
       pointer-events:none;
       z-index:0;
     }
+
+    /* cuori che salgono */
     .heart{
       position:absolute;
       transform: translateY(110vh);
@@ -61,11 +63,7 @@
       to{ transform: translateY(-25vh) rotate(18deg); opacity:0; }
     }
 
-    .twinkles{
-      position:fixed; inset:0;
-      pointer-events:none;
-      z-index:0;
-    }
+    /* stelline che lampeggiano */
     .tw{
       position:absolute;
       font-size: clamp(14px, 3.2vw, 22px);
@@ -79,14 +77,8 @@
       50%{ transform: scale(1.15); opacity:1; }
     }
 
-    /* romantic overlay sopra la card (visibile anche su telefono) */
-    .overlayLove{
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      z-index:3;
-      opacity:.28;
-    }
+    /* overlay sopra card (così su mobile si vede) */
+    .overlayLove{ z-index:3; opacity:.28; }
     .overlayLove .float{
       position:absolute;
       font-size: clamp(18px, 5vw, 28px);
@@ -102,7 +94,7 @@
       to{ transform: translateY(-25vh) rotate(12deg); opacity:0; }
     }
 
-    /* cuori “pop” quando tocchi/clicchi */
+    /* cuori “pop” */
     .pop{
       position:fixed;
       z-index:99;
@@ -115,6 +107,24 @@
     @keyframes popFly{
       0%{ transform: translate(-50%,-50%) scale(.9); opacity:1; }
       100%{ transform: translate(-50%,-120px) scale(1.25); opacity:0; }
+    }
+
+    /* ===== Sfondo arrabbiato per popup (emoji) ===== */
+    .angryBg{ z-index:2; display:none; opacity:.75; }
+    .angryFace{
+      position:absolute;
+      transform: translateY(110vh);
+      user-select:none;
+      will-change: transform, opacity;
+      animation: angryFloat linear infinite;
+      filter: drop-shadow(0 14px 22px rgba(255,40,40,.20));
+      opacity:.9;
+      font-size: clamp(18px, 5vw, 30px);
+    }
+    @keyframes angryFloat{
+      from{ transform: translateY(110vh) rotate(0deg); opacity:0; }
+      15%{ opacity:1; }
+      to{ transform: translateY(-25vh) rotate(-10deg); opacity:0; }
     }
 
     .wrap{
@@ -237,7 +247,7 @@
     /* ===== POPUP ARRABBIATO ===== */
     .modalBackdrop{
       position:fixed; inset:0;
-      background: rgba(120, 0, 0, .32); /* più rosso */
+      background: rgba(160, 0, 0, .30); /* rosso */
       display:none;
       align-items:center;
       justify-content:center;
@@ -245,17 +255,14 @@
       z-index: 50;
     }
 
-    /* glow rosso pulsante */
     @keyframes rageGlow{
       0%,100%{
         box-shadow: 0 28px 90px rgba(0,0,0,.35),
-                    0 0 0 0 rgba(255,0,0,.0),
-                    0 0 40px 6px rgba(255,40,40,.25);
+                    0 0 55px 10px rgba(255,40,40,.30);
       }
       50%{
         box-shadow: 0 28px 90px rgba(0,0,0,.35),
-                    0 0 0 0 rgba(255,0,0,.0),
-                    0 0 60px 14px rgba(255,40,40,.45);
+                    0 0 75px 18px rgba(255,40,40,.55);
       }
     }
 
@@ -263,9 +270,9 @@
       width:min(420px, 92vw);
       background: white;
       border-radius: 22px;
-      border: 4px solid #ff6a6a;
+      border: 4px solid #ff4f4f;
       overflow:hidden;
-      animation: rageGlow 1.1s ease-in-out infinite;
+      animation: rageGlow 1.05s ease-in-out infinite;
     }
 
     .modalHeader{
@@ -274,8 +281,8 @@
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      background: linear-gradient(135deg, #ffd6d6, #fff1e4);
-      border-bottom: 2px solid #ffbcbc;
+      background: linear-gradient(135deg, #ffd0d0, #ffe2cf);
+      border-bottom: 2px solid #ffb3b3;
     }
     .modalTitle{
       font-weight:900;
@@ -301,12 +308,12 @@
       text-align:center;
       font-size: 16px;
       background:
-        radial-gradient(220px 140px at 20% 10%, rgba(255,0,0,.10), transparent 60%),
-        radial-gradient(220px 140px at 80% 20%, rgba(255,110,0,.12), transparent 60%),
+        radial-gradient(240px 150px at 25% 10%, rgba(255,0,0,.16), transparent 65%),
+        radial-gradient(240px 150px at 75% 20%, rgba(255,110,0,.16), transparent 65%),
         #fff;
     }
     .modalBody .emoji{
-      font-size: 44px;
+      font-size: 46px;
       display:block;
       margin-bottom: 10px;
       filter: drop-shadow(0 12px 18px rgba(255,40,40,.35));
@@ -319,7 +326,7 @@
       color:#fff;
       font-weight:900;
       background: linear-gradient(135deg, var(--angry1), var(--angry2));
-      box-shadow: 0 18px 40px rgba(255,60,60,.28);
+      box-shadow: 0 18px 40px rgba(255,60,60,.30);
     }
 
     /* ===== RISULTATO ===== */
@@ -390,17 +397,21 @@
     }
     .choice:active{ transform: translateY(1px); }
 
+    /* frase romantica migliorata */
     .subChoice{
       margin-top: 10px;
       text-align:center;
       font-size: 18px;
-      font-weight: 700;
+      font-weight: 800;
       color:#5a3a4a;
-      padding: 10px 12px;
-      border-radius: 18px;
+      padding: 12px 14px;
+      border-radius: 999px;
       background: linear-gradient(135deg, #ffffff, #fff0f7);
       border: 1px solid #ffd2e6;
-      box-shadow: 0 10px 22px rgba(255,95,162,.12);
+      box-shadow: 0 12px 26px rgba(255,95,162,.14);
+    }
+    .subChoice .spark{
+      filter: drop-shadow(0 10px 14px rgba(255,95,162,.20));
     }
 
     @media (max-width: 430px){
@@ -415,6 +426,7 @@
   <div class="hearts" id="hearts"></div>
   <div class="twinkles" id="twinkles"></div>
   <div class="overlayLove" id="overlayLove"></div>
+  <div class="angryBg" id="angryBg"></div>
 
   <div class="wrap">
     <div class="card" id="card">
@@ -423,7 +435,7 @@
         <div class="pill">💌 San Valentino</div>
       </div>
 
-      <h1>Vuoi essere il mio Valentino? 💖</h1>
+      <h1 id="mainQuestion">Vuoi essere il mio Valentino? 💖</h1>
 
       <div class="stage">
         <div class="btnRow" id="btnRow">
@@ -439,7 +451,12 @@
           </div>
 
           <div class="choice" id="choiceBtn">SAGGIA SCELTA 💖</div>
-          <div class="subChoice">festeggiamo nella nostra casina carina?</div>
+
+          <div class="subChoice">
+            <span class="spark">✨💗</span>
+            festeggiamo nella nostra casina carina?
+            <span class="spark">💗✨</span>
+          </div>
         </div>
       </div>
     </div>
@@ -463,11 +480,13 @@
     const isMobile = window.matchMedia("(max-width: 520px)").matches;
     function rand(min, max){ return Math.random() * (max - min) + min; }
 
-    // ===== Hearts (più grandi e tanti su mobile) =====
+    // ===== Romantic layers =====
     const hearts = document.getElementById("hearts");
+    const twinkles = document.getElementById("twinkles");
+    const overlayLove = document.getElementById("overlayLove");
+
     const heartChars = ["💗","💖","💘","💕","💞","💓","💝","✨","🌸","🫶","🥰","💫"];
     const HEART_COUNT = isMobile ? 70 : 48;
-
     for(let i=0;i<HEART_COUNT;i++){
       const s = document.createElement("div");
       s.className = "heart";
@@ -475,14 +494,11 @@
       s.style.left = rand(0, 100) + "vw";
       s.style.animationDuration = rand(isMobile ? 5.5 : 7, isMobile ? 12 : 15) + "s";
       s.style.animationDelay = rand(0, 10) + "s";
-      const size = rand(isMobile ? 18 : 14, isMobile ? 34 : 26);
-      s.style.fontSize = size + "px";
+      s.style.fontSize = rand(isMobile ? 18 : 14, isMobile ? 34 : 26) + "px";
       s.style.opacity = rand(.55, .95);
       hearts.appendChild(s);
     }
 
-    // ===== Twinkles =====
-    const twinkles = document.getElementById("twinkles");
     const TW_COUNT = isMobile ? 18 : 12;
     for(let i=0;i<TW_COUNT;i++){
       const t = document.createElement("div");
@@ -494,11 +510,8 @@
       twinkles.appendChild(t);
     }
 
-    // ===== Overlay sopra card =====
-    const overlayLove = document.getElementById("overlayLove");
     const overlayChars = ["💖","💗","💕","✨","💞","💘","💝","🌸","💫"];
     const OVERLAY_COUNT = isMobile ? 18 : 10;
-
     for(let i=0;i<OVERLAY_COUNT;i++){
       const el = document.createElement("div");
       el.className = "float";
@@ -507,6 +520,41 @@
       el.style.animationDuration = rand(6, 12) + "s";
       el.style.animationDelay = rand(0, 6) + "s";
       overlayLove.appendChild(el);
+    }
+
+    function setRomanticVisible(on){
+      hearts.style.display = on ? "block" : "none";
+      twinkles.style.display = on ? "block" : "none";
+      overlayLove.style.display = on ? "block" : "none";
+    }
+
+    // ===== Angry background (emoji) =====
+    const angryBg = document.getElementById("angryBg");
+    const angryChars = ["😡","😠","🤬","💢","🔥"];
+    const ANGRY_COUNT = isMobile ? 26 : 18;
+
+    function buildAngryBg(){
+      angryBg.innerHTML = "";
+      for(let i=0;i<ANGRY_COUNT;i++){
+        const a = document.createElement("div");
+        a.className = "angryFace";
+        a.textContent = angryChars[Math.floor(Math.random()*angryChars.length)];
+        a.style.left = rand(0, 100) + "vw";
+        a.style.animationDuration = rand(5.5, 10) + "s";
+        a.style.animationDelay = rand(0, 6) + "s";
+        a.style.opacity = rand(.45, .9);
+        angryBg.appendChild(a);
+      }
+    }
+
+    function showAngryBg(){
+      buildAngryBg();
+      angryBg.style.display = "block";
+      setRomanticVisible(false); // ✅ niente cuori in popup
+    }
+    function hideAngryBg(){
+      angryBg.style.display = "none";
+      setRomanticVisible(true); // ✅ tornano cuori dopo
     }
 
     // ===== Pop hearts =====
@@ -561,6 +609,7 @@
     }
 
     function openModal(){
+      showAngryBg(); // ✅ emoji arrabbiate, no cuori
       modalBackdrop.style.display = "flex";
       modalBackdrop.setAttribute("aria-hidden", "false");
       closeX.focus();
@@ -570,8 +619,9 @@
     function closeModal(){
       modalBackdrop.style.display = "none";
       modalBackdrop.setAttribute("aria-hidden", "true");
-      noIsEvasive = true;
+      hideAngryBg(); // ✅ tornano cuori
 
+      noIsEvasive = true;
       const r = noBtn.getBoundingClientRect();
       popHearts(r.left + r.width/2, r.top + r.height/2);
     }
@@ -596,7 +646,7 @@
 
     modalBackdrop.addEventListener("click", (e) => {
       if(e.target === modalBackdrop){
-        shakeAngry(true); // più rabbia se cliccano fuori
+        shakeAngry(true);
       }
     });
 
@@ -620,11 +670,14 @@
       noBtn.style.position = "relative";
       noBtn.style.left = "";
       noBtn.style.top = "";
+
+      // ✅ torna alla schermata iniziale “intera”
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     closeResult.addEventListener("click", goBackToStart);
 
-    // clic su SAGGIA SCELTA torna indietro
+    // clic su SAGGIA SCELTA torna indietro (schermata completa)
     choiceBtn.addEventListener("click", goBackToStart);
     choiceBtn.addEventListener("touchstart", (e) => {
       e.preventDefault();
